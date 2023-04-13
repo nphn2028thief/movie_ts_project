@@ -11,9 +11,9 @@ const CPath = {
   search: "/search",
   // person: (personId: string) => `/person/:${personId}`,
   person: "/person/:personId",
-  favoriteList: "/favorites",
-  reviewList: "/reviews",
-  profile: "/my-profile",
+  favoriteList: "/me/favorites",
+  reviewList: "/me/reviews",
+  profile: "/me/profile",
   notFound: "*",
 };
 

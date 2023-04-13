@@ -1,3 +1,10 @@
+import { Box } from "@mui/material";
+import Wrapper from "./wrapper";
+
 export default function SearchPage() {
-  return <div>SearchPage</div>;
+  return (
+    <Wrapper>
+      <Box>SearchPage</Box>
+    </Wrapper>
+  );
 }

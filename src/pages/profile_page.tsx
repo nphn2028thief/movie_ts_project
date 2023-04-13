@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
 import Wrapper from "./wrapper";
 
-export default function HomePage() {
+export default function ProfilePage() {
   return (
     <Wrapper>
-      <Box>HomePage</Box>
+      <Box>ProfilePage</Box>
     </Wrapper>
   );
 }

@@ -1,13 +1,5 @@
-import {
-  FavoriteBorderOutlined,
-  HomeOutlined,
-  LiveTvOutlined,
-  LockResetOutlined,
-  RateReviewOutlined,
-  SearchOutlined,
-  SlideshowOutlined,
-} from "@mui/icons-material";
 import { lazy, LazyExoticComponent } from "react";
+import DefaultLayout from "../layouts/default_layout";
 import CPath from "./path";
 
 const HomePage = lazy(() => import("../pages/home_page"));
@@ -15,72 +7,141 @@ const MoviePage = lazy(() => import("../pages/movie_page"));
 const TvSeriesPage = lazy(() => import("../pages/tv_series_page"));
 const SearchPage = lazy(() => import("../pages/search_page"));
 const FavoritePage = lazy(() => import("../pages/favorite_page"));
+const ReviewPage = lazy(() => import("../pages/review_page"));
+const ProfilePage = lazy(() => import("../pages/profile_page"));
 const NotFoundPage = lazy(() => import("../pages/not_found_page"));
 
 interface IRoute {
   id: number;
-  display: string;
-  path?: ((params: any) => void) | string;
-  icon?: any;
-  page?: LazyExoticComponent<() => JSX.Element>;
+  name: string;
+  path: string;
+  page: LazyExoticComponent<() => JSX.Element>;
   layout?: (props: { children: JSX.Element }) => JSX.Element;
+}
+
+interface IItem {
+  id: number;
+  name: string;
+  path?: string;
+  icon?: string;
+  isDivider?: boolean;
 }
 
 export const CRouteList: IRoute[] = [
   {
     id: 1,
-    display: "Home",
-    // path: CPath.home,
+    name: "Home",
+    path: CPath.home,
     // icon: HomeOutlined,
     page: HomePage,
+    layout: DefaultLayout,
   },
   {
     id: 2,
-    display: "Movies",
-    // path: CPath.movie,
+    name: "Movies",
+    path: CPath.movie,
     // icon: SlideshowOutlined,
     page: MoviePage,
+    layout: DefaultLayout,
   },
   {
     id: 3,
-    display: "Tv Series",
-    // path: CPath.tv,
+    name: "Tv Series",
+    path: CPath.tv,
     // icon: LiveTvOutlined,
     page: TvSeriesPage,
+    layout: DefaultLayout,
   },
   {
     id: 4,
-    display: "Search",
+    name: "Search",
+    path: CPath.search,
     //   path: (mediaType: string) => CPath.search(mediaType),
     //   icon: SearchOutlined,
     page: SearchPage,
+    layout: DefaultLayout,
+  },
+  {
+    id: 5,
+    name: "My Favorites",
+    path: CPath.favoriteList,
+    //   path: (mediaType: string) => CPath.search(mediaType),
+    //   icon: SearchOutlined,
+    page: FavoritePage,
+    layout: DefaultLayout,
+  },
+  {
+    id: 6,
+    name: "My Reviews",
+    path: CPath.reviewList,
+    //   path: (mediaType: string) => CPath.search(mediaType),
+    //   icon: SearchOutlined,
+    page: ReviewPage,
+    layout: DefaultLayout,
+  },
+  {
+    id: 7,
+    name: "My Profile",
+    path: CPath.profile,
+    //   path: (mediaType: string) => CPath.search(mediaType),
+    //   icon: SearchOutlined,
+    page: ProfilePage,
+    layout: DefaultLayout,
   },
   {
     id: 8,
-    display: "404 Error Not Found",
+    name: "404 Error Not Found",
     path: CPath.notFound,
     page: NotFoundPage,
   },
 ];
 
-export const CAccountList: IRoute[] = [
+export const CHeaderItem: IItem[] = [
   {
     id: 1,
-    display: "Favorites",
-    // path: CPath.favoriteList,
-    // icon: FavoriteBorderOutlined,
-    page: FavoritePage,
+    name: "Home",
+    path: CPath.home,
   },
   {
     id: 2,
-    display: "Reviews",
-    path: CPath.reviewList,
-    icon: RateReviewOutlined,
+    name: "Movies",
+    path: CPath.movie,
   },
   {
     id: 3,
-    display: "My Profile",
+    name: "Tv Series",
+    path: CPath.tv,
+  },
+  {
+    id: 4,
+    name: "Search",
+    path: CPath.search,
+  },
+];
+
+export const CUserMenu: IItem[] = [
+  {
+    id: 1,
+    name: "My Profile",
     path: CPath.profile,
-    icon: LockResetOutlined,
+    icon: "LockResetOutlined",
+  },
+  {
+    id: 2,
+    name: "Favorites",
+    path: CPath.favoriteList,
+    icon: "FavoriteBorderOutlined",
+  },
+  {
+    id: 3,
+    name: "Reviews",
+    path: CPath.reviewList,
+    icon: "RateReviewOutlined",
+  },
+  {
+    id: 4,
+    name: "Log Out",
+    icon: "LogoutOutlined",
+    isDivider: true,
   },
 ];
