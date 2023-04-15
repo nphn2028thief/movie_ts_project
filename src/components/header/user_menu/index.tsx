@@ -1,10 +1,4 @@
 import {
-  FavoriteBorderOutlined,
-  LockResetOutlined,
-  RateReviewOutlined,
-  LogoutOutlined,
-} from "@mui/icons-material";
-import {
   Avatar,
   Box,
   Divider,
@@ -33,19 +27,6 @@ export default function UserMenu() {
   const { pathname } = useLocation();
 
   const active = CUserMenu.findIndex((item) => item.path === pathname);
-
-  const getIcons = (icon?: string) => {
-    switch (icon) {
-      case "LockResetOutlined":
-        return <LockResetOutlined fontSize="small" />;
-      case "FavoriteBorderOutlined":
-        return <FavoriteBorderOutlined fontSize="small" />;
-      case "RateReviewOutlined":
-        return <RateReviewOutlined fontSize="small" />;
-      case "LogoutOutlined":
-        return <LogoutOutlined fontSize="small" />;
-    }
-  };
 
   return (
     <>
@@ -76,7 +57,7 @@ export default function UserMenu() {
             PaperProps={{ sx: { padding: 0, top: "58px !important" } }}
           >
             {CUserMenu.map((item) => {
-              const icon = getIcons(item.icon);
+              const Icon = item.icon;
 
               return (
                 <>
@@ -96,6 +77,7 @@ export default function UserMenu() {
                     sx={{
                       minWidth: 180,
                       gap: 1,
+                      color: item.id === active + 1 ? "primary.main" : "unset",
                     }}
                     onClick={() => {
                       if (item.isDivider && !item.path) {
@@ -106,7 +88,15 @@ export default function UserMenu() {
                       setAnchorEl(null);
                     }}
                   >
-                    <ListItemIcon sx={{ minWidth: 0 }}>{icon}</ListItemIcon>
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        color:
+                          item.id === active + 1 ? "primary.main" : "unset",
+                      }}
+                    >
+                      <Icon fontSize="small" />
+                    </ListItemIcon>
                     <ListItemText
                       disableTypography
                       primary={<Typography>{item.name}</Typography>}

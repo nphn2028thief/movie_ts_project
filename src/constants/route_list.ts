@@ -1,6 +1,17 @@
 import { lazy, LazyExoticComponent } from "react";
 import DefaultLayout from "../layouts/default_layout";
+import { IItem } from "../types/route_list";
 import CPath from "./path";
+import {
+  FavoriteBorderOutlined,
+  HomeOutlined,
+  LiveTvOutlined,
+  LockResetOutlined,
+  LogoutOutlined,
+  RateReviewOutlined,
+  SearchOutlined,
+  SlideshowOutlined,
+} from "@mui/icons-material";
 
 const HomePage = lazy(() => import("../pages/home_page"));
 const MoviePage = lazy(() => import("../pages/movie_page"));
@@ -17,14 +28,6 @@ interface IRoute {
   path: string;
   page: LazyExoticComponent<() => JSX.Element>;
   layout?: (props: { children: JSX.Element }) => JSX.Element;
-}
-
-interface IItem {
-  id: number;
-  name: string;
-  path?: string;
-  icon?: string;
-  isDivider?: boolean;
 }
 
 export const CRouteList: IRoute[] = [
@@ -101,21 +104,25 @@ export const CHeaderItem: IItem[] = [
     id: 1,
     name: "Home",
     path: CPath.home,
+    icon: HomeOutlined,
   },
   {
     id: 2,
     name: "Movies",
     path: CPath.movie,
+    icon: SlideshowOutlined,
   },
   {
     id: 3,
     name: "Tv Series",
     path: CPath.tv,
+    icon: LiveTvOutlined,
   },
   {
     id: 4,
     name: "Search",
     path: CPath.search,
+    icon: SearchOutlined,
   },
 ];
 
@@ -124,24 +131,24 @@ export const CUserMenu: IItem[] = [
     id: 1,
     name: "My Profile",
     path: CPath.profile,
-    icon: "LockResetOutlined",
+    icon: LockResetOutlined,
   },
   {
     id: 2,
     name: "Favorites",
     path: CPath.favoriteList,
-    icon: "FavoriteBorderOutlined",
+    icon: FavoriteBorderOutlined,
   },
   {
     id: 3,
     name: "Reviews",
     path: CPath.reviewList,
-    icon: "RateReviewOutlined",
+    icon: RateReviewOutlined,
   },
   {
     id: 4,
     name: "Log Out",
-    icon: "LogoutOutlined",
+    icon: LogoutOutlined,
     isDivider: true,
   },
 ];

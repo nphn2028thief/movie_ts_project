@@ -1,18 +1,22 @@
 import { DarkModeOutlined, LightModeOutlined, Menu } from "@mui/icons-material";
-import { AppBar, Box, Button, IconButton, Stack, Toolbar } from "@mui/material";
+import { AppBar, Box, Button, IconButton, Toolbar } from "@mui/material";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CHeaderItem } from "../../constants/route_list";
 import { useAppDispatch, useAppSelector } from "../../redux_store";
+import { setIsOpen } from "../../redux_store/mobile_menu/mobile_menu_slice";
 import { setModalIsOpen } from "../../redux_store/modal/modal_slice";
-import { setThemMode } from "../../redux_store/mode/mode_slice";
 import { themeMode as themeModeType } from "../../types/theme_mode";
+import { handleSwitchTheme } from "../../utils/function";
 import Logo from "../logo";
 import ModeWrapper from "../mode_wrapper";
+import MobileSidebar from "./mobile_sidebar";
 import UserMenu from "./user_menu";
 
 export default function Header() {
   const { themeMode } = useAppSelector((state) => state.modeSlice);
   const { user } = useAppSelector((state) => state.userSlice);
+  const { isOpen } = useAppSelector((state) => state.mobileMenuSlice);
   const dispatch = useAppDispatch();
 
   const { pathname } = useLocation();
@@ -28,105 +32,104 @@ export default function Header() {
 
   const active = CHeaderItem.findIndex((item) => item.path === pathname);
 
-  const handleSwitchTheme = () => {
-    const theme =
-      themeMode === themeModeType.dark
-        ? themeModeType.light
-        : themeModeType.dark;
-    dispatch(setThemMode(theme));
+  const handleToggleMobileMenu = () => {
+    dispatch(setIsOpen(!isOpen));
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      dispatch(setIsOpen(false));
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <ModeWrapper>
-      <AppBar sx={{ zIndex: 9999 }}>
-        <Toolbar
-          sx={{
-            minHeight: { xs: "56px", md: "64px" },
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Stack
+    <>
+      <MobileSidebar />
+
+      <ModeWrapper>
+        <AppBar sx={{ zIndex: 9999 }}>
+          <Toolbar
             sx={{
-              flexDirection: "row",
-              gap: 1,
+              minHeight: { xs: "56px", md: "64px" },
+              justifyContent: "space-between",
               alignItems: "center",
-              position: "relative",
-              flex: {
-                xs: 1,
-                md: 0,
-              },
             }}
           >
-            <IconButton color="inherit" sx={{ mr: 2, display: { md: "none" } }}>
+            <IconButton
+              color="inherit"
+              sx={{ mr: 2, display: { md: "none" } }}
+              onClick={handleToggleMobileMenu}
+            >
               <Menu />
             </IconButton>
 
             <Box
               sx={{
-                display: { xs: "inline-block", md: "none" },
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
+                display: { md: "none" },
               }}
             >
               <Logo />
             </Box>
-          </Stack>
 
-          <Box
-            sx={{
-              display: { xs: "none", md: "flex" },
-              alignItems: "center",
-              flex: 1,
-            }}
-          >
-            <Box mr="30px">
-              <Logo />
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+                alignItems: "center",
+                flex: 1,
+              }}
+            >
+              <Box mr="30px">
+                <Logo />
+              </Box>
+
+              {CHeaderItem.map((item) => (
+                <Button
+                  key={item.id}
+                  sx={{
+                    minWidth: "71px",
+                    color:
+                      item.id === active + 1
+                        ? "primary.contrastText"
+                        : "inherit",
+                    padding: "6px 16px",
+                  }}
+                  variant={item.id === active + 1 ? "contained" : "text"}
+                  onClick={() => item.path && navigate(item.path)}
+                >
+                  {item.name}
+                </Button>
+              ))}
+
+              <IconButton
+                color="inherit"
+                onClick={() => handleSwitchTheme(themeMode, dispatch)}
+              >
+                {themeMode === themeModeType.dark ? (
+                  <DarkModeOutlined />
+                ) : (
+                  <LightModeOutlined />
+                )}
+              </IconButton>
             </Box>
 
-            {CHeaderItem.map((item) => (
+            {user ? (
+              <UserMenu />
+            ) : (
               <Button
-                key={item.id}
-                sx={{
-                  minWidth: "71px",
-                  color:
-                    item.id === active + 1 ? "primary.contrastText" : "inherit",
-                  padding: "6px 16px",
-                }}
-                variant={item.id === active + 1 ? "contained" : "text"}
-                onClick={() => {
-                  item.path && navigate(item.path);
-                }}
+                variant="contained"
+                onClick={() => dispatch(setModalIsOpen(true))}
               >
-                {item.name}
+                Log In
               </Button>
-            ))}
-
-            <IconButton color="inherit" onClick={handleSwitchTheme}>
-              {themeMode === themeModeType.dark ? (
-                <DarkModeOutlined />
-              ) : (
-                <LightModeOutlined />
-              )}
-            </IconButton>
-          </Box>
-
-          {user ? (
-            <UserMenu />
-          ) : (
-            <Button
-              variant="contained"
-              sx={{ display: { xs: "none", md: "flex" } }}
-              onClick={() => dispatch(setModalIsOpen(true))}
-            >
-              Log In
-            </Button>
-          )}
-          {/* <UserMenu /> */}
-        </Toolbar>
-      </AppBar>
-    </ModeWrapper>
+            )}
+            {/* <UserMenu /> */}
+          </Toolbar>
+        </AppBar>
+      </ModeWrapper>
+    </>
   );
 }
