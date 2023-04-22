@@ -3,5 +3,4 @@ export interface IItem {
   name: string;
   path?: string;
   icon?: any;
-  isDivider?: boolean;
 }

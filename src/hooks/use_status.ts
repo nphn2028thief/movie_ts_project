@@ -2,19 +2,19 @@ import { useAppSelector } from "../redux_store";
 
 export const useIsRequestPending = (sliceName: string, actionName: string) => {
   return useAppSelector(
-    (state) => state.apiSlice?.[sliceName]?.[actionName].status === "pending"
+    (state) => state.apiSlice?.[sliceName]?.[actionName]?.status === "pending"
   );
 };
 
 export const useIsRequestSuccess = (sliceName: string, actionName: string) => {
   return useAppSelector(
-    (state) => state.apiSlice?.[sliceName]?.[actionName].status === "fulfilled"
+    (state) => state.apiSlice?.[sliceName]?.[actionName]?.status === "fulfilled"
   );
 };
 
 export const useIsRequestError = (sliceName: string, actionName: string) => {
   return useAppSelector(
-    (state) => state.apiSlice?.[sliceName]?.[actionName].status === "rejected"
+    (state) => state.apiSlice?.[sliceName]?.[actionName]?.status === "rejected"
   );
 };
 

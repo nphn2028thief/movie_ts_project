@@ -32,13 +32,20 @@ const authApi = {
     }
   },
 
-  login: async (loginInfo: ILoginInfo) => {
-    try {
-      const response = await publicClient.post(authEndpoints.login, loginInfo);
-      return response;
-    } catch (error) {
-      return error;
-    }
+  // login: async (loginInfo: ILoginInfo) => {
+  //   try {
+  //     const response = await publicClient.post(authEndpoints.login, loginInfo);
+  //     return response;
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // },
+
+  login: (loginInfo: ILoginInfo) => {
+    return publicClient.post<{ accessToken: string; refreshToken: string }>(
+      "/auth/login",
+      loginInfo
+    );
   },
 
   getMe: async () => {

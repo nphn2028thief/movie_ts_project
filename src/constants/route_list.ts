@@ -145,10 +145,4 @@ export const CUserMenu: IItem[] = [
     path: CPath.reviewList,
     icon: RateReviewOutlined,
   },
-  {
-    id: 4,
-    name: "Log Out",
-    icon: LogoutOutlined,
-    isDivider: true,
-  },
 ];

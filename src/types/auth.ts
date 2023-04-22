@@ -1,11 +1,31 @@
+export enum ETYPE {
+  login = "login",
+  register = "register",
+}
+
+export interface ITokens {
+  accessToken: string;
+  refreshToken: string;
+}
+
 export interface ILoginInfo {
   username: string;
   password: string;
 }
 
-export interface IRegisterInfo extends ILoginInfo {
+export interface IRegisterInfo {
+  username: string;
+  password: string;
   firstName: string;
   lastName: string;
+}
+
+export interface IUser {
+  id: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  image: string | undefined;
 }
 
 export interface IUpdateAccountInfo

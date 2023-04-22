@@ -1,10 +1,10 @@
 import { colors, PaletteMode } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
-import { themeMode } from "../../types/theme_mode";
+import { ETHEME } from "../../types/theme_mode";
 import components from "./components";
 
 const setMode = (mode: string) => {
-  if (mode === themeMode.dark) {
+  if (mode === ETHEME.dark) {
     return {
       primary: {
         main: "#ff0000",

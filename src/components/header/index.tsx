@@ -1,26 +1,41 @@
 import { DarkModeOutlined, LightModeOutlined, Menu } from "@mui/icons-material";
-import { AppBar, Box, Button, IconButton, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Skeleton,
+  Stack,
+  Toolbar,
+} from "@mui/material";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CHeaderItem } from "../../constants/route_list";
 import { useAppDispatch, useAppSelector } from "../../redux_store";
 import { setIsOpen } from "../../redux_store/mobile_menu/mobile_menu_slice";
 import { setModalIsOpen } from "../../redux_store/modal/modal_slice";
-import { themeMode as themeModeType } from "../../types/theme_mode";
+import { ETHEME } from "../../types/theme_mode";
 import { handleSwitchTheme } from "../../utils/function";
+import AuthModal from "../auth_modal";
 import Logo from "../logo";
 import ModeWrapper from "../mode_wrapper";
 import MobileSidebar from "./mobile_sidebar";
 import UserMenu from "./user_menu";
+import { getMe } from "../../redux_store/auth/auth_actions";
+import { useIsRequestPending } from "../../hooks/use_status";
+import LoginButton from "../login_button";
 
 export default function Header() {
   const { themeMode } = useAppSelector((state) => state.modeSlice);
-  const { user } = useAppSelector((state) => state.userSlice);
+  const { userInfo } = useAppSelector((state) => state.authSlice);
   const { isOpen } = useAppSelector((state) => state.mobileMenuSlice);
   const dispatch = useAppDispatch();
 
   const { pathname } = useLocation();
   const navigate = useNavigate();
+
+  const isLoadingGetMe = useIsRequestPending("auth", "getMe");
 
   document.title =
     pathname.split("/")[1] === ""
@@ -31,6 +46,29 @@ export default function Header() {
         }`;
 
   const active = CHeaderItem.findIndex((item) => item.path === pathname);
+
+  const handleGetMe = () => {
+    if (isLoadingGetMe) {
+      return (
+        <Stack
+          sx={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <Skeleton variant="text" width={100} height={32} />
+          <Skeleton variant="circular" width={32} height={32} />
+        </Stack>
+      );
+    } else {
+      if (userInfo) {
+        return <UserMenu />;
+      } else {
+        return <LoginButton />;
+      }
+    }
+  };
 
   const handleToggleMobileMenu = () => {
     dispatch(setIsOpen(!isOpen));
@@ -69,7 +107,23 @@ export default function Header() {
 
             <Box
               sx={{
-                display: { md: "none" },
+                display: { sm: "none" },
+                position: {
+                  xs: "absolute",
+                  sm: "static",
+                },
+                top: {
+                  xs: "50%",
+                  sm: 0,
+                },
+                left: {
+                  xs: "50%",
+                  sm: 0,
+                },
+                transform: {
+                  xs: "translate(-50%, -50%)",
+                  sm: "none",
+                },
               }}
             >
               <Logo />
@@ -108,7 +162,7 @@ export default function Header() {
                 color="inherit"
                 onClick={() => handleSwitchTheme(themeMode, dispatch)}
               >
-                {themeMode === themeModeType.dark ? (
+                {themeMode === ETHEME.dark ? (
                   <DarkModeOutlined />
                 ) : (
                   <LightModeOutlined />
@@ -116,20 +170,12 @@ export default function Header() {
               </IconButton>
             </Box>
 
-            {user ? (
-              <UserMenu />
-            ) : (
-              <Button
-                variant="contained"
-                onClick={() => dispatch(setModalIsOpen(true))}
-              >
-                Log In
-              </Button>
-            )}
-            {/* <UserMenu /> */}
+            {handleGetMe()}
           </Toolbar>
         </AppBar>
       </ModeWrapper>
+
+      <AuthModal />
     </>
   );
 }

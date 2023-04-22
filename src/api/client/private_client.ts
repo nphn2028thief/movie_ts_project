@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import qs from "query-string";
 
-const baseURL = "http://localhost:3000/api/v1";
+const baseURL = "http://localhost:5000/api/v1";
 
 const privateClient = axios.create({
   baseURL,
@@ -12,12 +12,15 @@ const privateClient = axios.create({
 
 privateClient.interceptors.request.use(
   (config: any) => {
+    const controller = new AbortController();
+
     return {
       ...config,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
+      signal: controller.abort(),
     };
   },
   (error) => Promise.reject(error)
@@ -25,9 +28,9 @@ privateClient.interceptors.request.use(
 
 privateClient.interceptors.response.use(
   (response: any) => {
-    if (response && response.data) {
-      return response.data;
-    }
+    // if (response && response.data) {
+    //   return response.data;
+    // }
 
     return response;
   },

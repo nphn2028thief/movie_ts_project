@@ -1,7 +1,7 @@
 import { useScrollTrigger } from "@mui/material";
 import { cloneElement } from "react";
 import { useAppSelector } from "../../redux_store";
-import { themeMode as themeModeType } from "../../types/theme_mode";
+import { ETHEME } from "../../types/theme_mode";
 
 interface IProps {
   window?: () => Window;
@@ -22,12 +22,12 @@ export default function ModeWrapper(props: IProps) {
     sx: {
       color: trigger
         ? "text.primary"
-        : themeMode === themeModeType.dark
+        : themeMode === ETHEME.dark
         ? "primary.contrastText"
         : "text.primary",
       backgroundColor: trigger
         ? "background.paper"
-        : themeMode === themeModeType.dark
+        : themeMode === ETHEME.dark
         ? "background.paper"
         : "primary.contrastText",
     },

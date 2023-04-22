@@ -1,9 +1,9 @@
-import { Box } from "@mui/material";
 import { Fragment, Suspense } from "react";
 import { Route, Routes as Router } from "react-router-dom";
 import Loading from "../components/loading";
 import { CRouteList } from "../constants/route_list";
 import GlobalStyles from "./global_styles";
+
 export default function Routes() {
   return (
     <GlobalStyles>
