@@ -18,9 +18,7 @@ const mediaSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getMediaList.fulfilled, (state, action) => {
-      const { results } = action.payload;
-
-      state.mediaList = results.slice(0, 5);
+      state.mediaList = action.payload.slice(0, 5);
     });
     builder.addCase(getGenreList.fulfilled, (state, action) => {
       state.genreList = action.payload;

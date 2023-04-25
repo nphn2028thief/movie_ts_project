@@ -19,7 +19,7 @@ export const getMediaList = createAsyncThunk(
   "media/getMediaList",
   async (payload: IMedia, { rejectWithValue }) => {
     try {
-      const response = await publicClient.get<any[]>(
+      const response = await publicClient.get(
         mediaEndpoints.list(
           payload.mediaType,
           payload.mediaCategory,
@@ -27,7 +27,7 @@ export const getMediaList = createAsyncThunk(
         )
       );
 
-      return response.data;
+      return response.data.results;
     } catch (error) {
       return rejectWithValue(error);
     }
