@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import privateClient from "../../api/client/private_client";
 import publicClient from "../../api/client/public_client";
-import { ILoginInfo, IRegisterInfo, ITokens, IUser } from "../../types/auth";
+import { ILoginInfo, IRegisterInfo, IUser } from "../../types/auth";
 
 const authEndpoints = {
   register: "/auth/register",
@@ -10,9 +10,6 @@ const authEndpoints = {
   updateMe: "/auth/updateMe",
   changePassword: "/auth/changePassword",
   refreshToken: "/auth/refreshToken",
-  //   getFavorites: "/favorites",
-  //   addFavorite: "/favorites",
-  //   deleteFavorite: "/favorite/:favoriteId",
 };
 
 export const register = createAsyncThunk(
@@ -48,14 +45,13 @@ export const login = createAsyncThunk(
   }
 );
 
-export const getMe = createAsyncThunk(
-  "auth/getMe",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await privateClient.get<IUser>(authEndpoints.getMe);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+export const getMe = createAsyncThunk("auth/getMe", async (_, thunkAPI) => {
+  try {
+    const response = await privateClient.get<IUser>(authEndpoints.getMe, {
+      signal: thunkAPI.signal,
+    });
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
-);
+});

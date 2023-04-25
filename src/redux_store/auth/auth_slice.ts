@@ -4,12 +4,10 @@ import { getMe, login, register } from "./auth_actions";
 
 interface IState {
   userInfo: IUser | null;
-  accessToken: string;
 }
 
 const initialState: IState = {
   userInfo: null,
-  accessToken: "",
 };
 
 const authSlice = createSlice({
@@ -25,7 +23,6 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
       const accessToken = action.payload.accessToken;
-      state.accessToken = accessToken;
       localStorage.setItem("accessToken", accessToken);
     });
     builder.addCase(getMe.fulfilled, (state, action) => {

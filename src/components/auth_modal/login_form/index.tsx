@@ -43,7 +43,7 @@ export default function LoginForm(props: IProps) {
       .unwrap()
       .then(() => {
         dispatch(setModalIsOpen(false));
-        dispatch(getMe());
+        // dispatch(getMe());
         toastMessage.success("Login Successfully!");
       })
       .catch((error) => {

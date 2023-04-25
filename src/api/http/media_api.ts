@@ -16,10 +16,11 @@ const mediaApi = {
     page: number
   ) => {
     try {
-      const response = await publicClient.get(
+      const response = await publicClient.get<any[]>(
         mediaEndpoints.list(mediaType, mediaCategory, page)
       );
-      return response;
+
+      return response.data;
     } catch (error) {
       return error;
     }
@@ -30,7 +31,7 @@ const mediaApi = {
       const response = await publicClient.get(
         mediaEndpoints.detail(mediaType, mediaId)
       );
-      return response;
+      return response.data;
     } catch (error) {
       return error;
     }
@@ -41,7 +42,7 @@ const mediaApi = {
       const response = await publicClient.get(
         mediaEndpoints.search(mediaType, keyword, page)
       );
-      return response;
+      return response.data;
     } catch (error) {
       return error;
     }

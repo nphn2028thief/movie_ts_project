@@ -3,6 +3,8 @@ import qs from "query-string";
 
 const baseURL = "http://localhost:5000/api/v1";
 
+const controller = new AbortController();
+
 const publicClient = axios.create({
   baseURL,
   paramsSerializer: {
@@ -12,14 +14,12 @@ const publicClient = axios.create({
 
 publicClient.interceptors.request.use(
   (config: any) => {
-    const controller = new AbortController();
-
     return {
       ...config,
       headers: {
         "Content-Type": "application/json",
       },
-      signal: controller.abort(),
+      signal: controller.signal,
     };
   },
   (error) => Promise.reject(error)

@@ -1,5 +1,5 @@
 import { useScrollTrigger } from "@mui/material";
-import { cloneElement } from "react";
+import { cloneElement, useRef } from "react";
 import { useAppSelector } from "../../redux_store";
 import { ETHEME } from "../../types/theme_mode";
 
@@ -14,7 +14,7 @@ export default function ModeWrapper(props: IProps) {
 
   const trigger = useScrollTrigger({
     disableHysteresis: true,
-    threshold: 50,
+    threshold: 0,
     target: window ? window() : undefined,
   });
 

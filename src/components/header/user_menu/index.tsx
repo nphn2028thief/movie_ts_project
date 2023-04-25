@@ -26,82 +26,98 @@ export default function UserMenu() {
 
   const active = CUserMenu.findIndex((item) => item.path === pathname);
 
+  // const handleGetMe = () => {
+  //   if (isLoadingGetMe) {
+  //     return (
+  //       <Stack
+  //         sx={{
+  //           flexDirection: "row",
+  //           alignItems: "center",
+  //           gap: 1,
+  //         }}
+  //       >
+  //         <Skeleton variant="text" width={100} height={32} />
+  //         <Skeleton variant="circular" width={32} height={32} />
+  //       </Stack>
+  //     );
+  //   }
+
+  //   return (
+
+  //   );
+  // };
+
   return (
     <>
-      {userInfo && (
-        <>
-          <Stack
-            sx={{
-              display: {
-                xs: "none",
-                sm: "flex",
-              },
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 1,
-              cursor: "pointer",
-            }}
-            onClick={(e) => setAnchorEl(e.currentTarget)}
-          >
-            <Box>
-              <Typography sx={{ userSelect: "none" }}>
-                {userInfo.firstName} {userInfo.lastName}
-                {/* Nhan Nguyen */}
-              </Typography>
-            </Box>
+      <Stack
+        sx={{
+          display: {
+            xs: "none",
+            sm: "flex",
+          },
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 1,
+          cursor: "pointer",
+        }}
+        onClick={(e) => setAnchorEl(e.currentTarget)}
+      >
+        <Box>
+          <Typography sx={{ userSelect: "none" }}>
+            {userInfo?.firstName} {userInfo?.lastName}
+            {/* Nhan Nguyen */}
+          </Typography>
+        </Box>
 
-            <Avatar
-              src={userInfo.image || ""}
-              alt="user_avatar"
-              sx={{ width: 32, height: 32 }}
-            />
-          </Stack>
+        <Avatar
+          src={userInfo?.image || ""}
+          alt="user_avatar"
+          sx={{ width: 32, height: 32 }}
+        />
+      </Stack>
 
-          <Menu
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            onClose={() => setAnchorEl(null)}
-            PaperProps={{ sx: { padding: 0, top: "58px !important" } }}
-          >
-            {CUserMenu.map((item) => {
-              const Icon = item.icon;
+      <Menu
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={() => setAnchorEl(null)}
+        PaperProps={{ sx: { padding: 0, top: "58px !important" } }}
+      >
+        {CUserMenu.map((item) => {
+          const Icon = item.icon;
 
-              return (
-                <Stack key={item.id}>
-                  <ListItemButton
-                    sx={{
-                      minWidth: 180,
-                      gap: 1,
-                      color: item.id === active + 1 ? "primary.main" : "unset",
-                    }}
-                    onClick={() => {
-                      item.path && navigate(item.path);
-                      setAnchorEl(null);
-                    }}
-                  >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        color:
-                          item.id === active + 1 ? "primary.main" : "unset",
-                      }}
-                    >
-                      <Icon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText
-                      disableTypography
-                      primary={<Typography>{item.name}</Typography>}
-                      sx={{ flex: 1 }}
-                    />
-                  </ListItemButton>
-                </Stack>
-              );
-            })}
+          return (
+            <Stack key={item.id}>
+              <ListItemButton
+                sx={{
+                  minWidth: 180,
+                  gap: 1,
+                  color: item.id === active + 1 ? "primary.main" : "unset",
+                }}
+                onClick={() => {
+                  item.path && navigate(item.path);
+                  setAnchorEl(null);
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    color: item.id === active + 1 ? "primary.main" : "unset",
+                  }}
+                >
+                  <Icon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText
+                  disableTypography
+                  primary={<Typography>{item.name}</Typography>}
+                  sx={{ flex: 1 }}
+                />
+              </ListItemButton>
+            </Stack>
+          );
+        })}
 
-            <LogOutButton mt={1} />
-          </Menu>
-        </>
-      )}
+        <LogOutButton mt={1} />
+      </Menu>
     </>
   );
 }

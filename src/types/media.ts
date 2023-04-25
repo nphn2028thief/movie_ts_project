@@ -25,3 +25,14 @@ export interface IMediaCategory {
   airing_today?: string;
   on_the_air?: string;
 }
+
+export interface IMedia {
+  mediaType: string;
+  mediaCategory: string;
+  page: number;
+}
+
+export interface IGenre {
+  id: number;
+  name: string;
+}

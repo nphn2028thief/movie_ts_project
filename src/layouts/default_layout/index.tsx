@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import Scrollbars from "react-custom-scrollbars-2";
 import { Outlet } from "react-router-dom";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
@@ -13,14 +12,13 @@ interface IProps {
 
 export default function DefaultLayout(props: IProps) {
   const dispatch = useAppDispatch();
+  const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-
     if (accessToken) {
       dispatch(getMe());
     }
-  }, [dispatch]);
+  }, [dispatch, accessToken]);
 
   return (
     <>

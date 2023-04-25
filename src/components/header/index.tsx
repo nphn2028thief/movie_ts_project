@@ -3,7 +3,6 @@ import {
   AppBar,
   Box,
   Button,
-  CircularProgress,
   IconButton,
   Skeleton,
   Stack,
@@ -12,19 +11,17 @@ import {
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CHeaderItem } from "../../constants/route_list";
+import { useIsRequestPending } from "../../hooks/use_status";
 import { useAppDispatch, useAppSelector } from "../../redux_store";
 import { setIsOpen } from "../../redux_store/mobile_menu/mobile_menu_slice";
-import { setModalIsOpen } from "../../redux_store/modal/modal_slice";
 import { ETHEME } from "../../types/theme_mode";
 import { handleSwitchTheme } from "../../utils/function";
 import AuthModal from "../auth_modal";
+import LoginButton from "../login_button";
 import Logo from "../logo";
 import ModeWrapper from "../mode_wrapper";
 import MobileSidebar from "./mobile_sidebar";
 import UserMenu from "./user_menu";
-import { getMe } from "../../redux_store/auth/auth_actions";
-import { useIsRequestPending } from "../../hooks/use_status";
-import LoginButton from "../login_button";
 
 export default function Header() {
   const { themeMode } = useAppSelector((state) => state.modeSlice);
@@ -89,7 +86,7 @@ export default function Header() {
       <MobileSidebar />
 
       <ModeWrapper>
-        <AppBar sx={{ zIndex: 9999 }}>
+        <AppBar>
           <Toolbar
             sx={{
               minHeight: { xs: "56px", md: "64px" },
