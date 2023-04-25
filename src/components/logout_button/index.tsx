@@ -1,16 +1,17 @@
+import { LogoutOutlined } from "@mui/icons-material";
 import {
-  Stack,
   Divider,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Stack,
   Typography,
 } from "@mui/material";
-import { ETHEME } from "../../types/theme_mode";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux_store";
 import { logout } from "../../redux_store/auth/auth_slice";
 import { setIsOpen } from "../../redux_store/mobile_menu/mobile_menu_slice";
-import { LogoutOutlined } from "@mui/icons-material";
+import { ETHEME } from "../../types/theme_mode";
 
 interface IProps {
   isMobile?: boolean;
@@ -23,6 +24,8 @@ export default function LogOutButton(props: IProps) {
   const { themeMode } = useAppSelector((state) => state.modeSlice);
   const { isOpen } = useAppSelector((state) => state.modalSlice);
   const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
 
   return (
     <Stack

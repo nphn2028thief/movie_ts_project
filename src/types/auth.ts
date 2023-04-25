@@ -1,6 +1,7 @@
 export enum ETYPE {
   login = "login",
   register = "register",
+  changePassword = "changePassword",
 }
 
 export interface ITokens {

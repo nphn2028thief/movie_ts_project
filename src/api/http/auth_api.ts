@@ -13,10 +13,6 @@ const authEndpoints = {
   getMe: "/auth/me",
   updateMe: "/auth/updateMe",
   changePassword: "/auth/changePassword",
-  refreshToken: "/auth/refreshToken",
-  //   getFavorites: "/favorites",
-  //   addFavorite: "/favorites",
-  //   deleteFavorite: "/favorite/:favoriteId",
 };
 
 const authApi = {
@@ -74,18 +70,6 @@ const authApi = {
       const response = await privateClient.put(
         authEndpoints.changePassword,
         passwordInfo
-      );
-      return response;
-    } catch (error) {
-      return error;
-    }
-  },
-
-  refreshToken: async (refreshToken: string) => {
-    try {
-      const response = await privateClient.post(
-        authEndpoints.refreshToken,
-        refreshToken
       );
       return response;
     } catch (error) {

@@ -1,7 +1,11 @@
 import { Box, Button, Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux_store";
-import { setModalIsOpen } from "../../redux_store/modal/modal_slice";
+import {
+  resetType,
+  setModalIsOpen,
+  setType,
+} from "../../redux_store/modal/modal_slice";
 import { ETHEME } from "../../types/theme_mode";
 import Logo from "../logo";
 import ModeWrapper from "../mode_wrapper";
@@ -11,31 +15,35 @@ import { ETYPE } from "../../types/auth";
 import { useIsRequestPending } from "../../hooks/use_status";
 
 export default function AuthModal() {
-  const { isOpen } = useAppSelector((state) => state.modalSlice);
+  const { isOpen, type } = useAppSelector((state) => state.modalSlice);
   const { themeMode } = useAppSelector((state) => state.modeSlice);
   const dispatch = useAppDispatch();
 
-  const [type, setType] = useState<ETYPE>(ETYPE.login);
+  // const [type, setType] = useState<ETYPE>(ETYPE.login);
 
   const isLoadingLogin = useIsRequestPending("auth", "login");
+  const isLoadingRegister = useIsRequestPending("auth", "register");
 
-  useEffect(() => {
-    if (isOpen) {
-      setType(ETYPE.login);
-    }
-  }, [isOpen]);
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     dispatch(setType(ETYPE.login));
+  //   }
+  // }, [isOpen]);
 
   const handleClose = () => {
     dispatch(setModalIsOpen(false));
+    dispatch(resetType());
   };
 
-  const handleSwitchModalType = (state: ETYPE) => {
-    setType(state);
-    // console.log("haha");
+  const handleSwitchModalType = (state: string) => {
+    dispatch(setType(state));
   };
 
   return (
-    <Modal open={isOpen} onClose={isLoadingLogin ? () => {} : handleClose}>
+    <Modal
+      open={isOpen}
+      onClose={isLoadingLogin || isLoadingRegister ? () => {} : handleClose}
+    >
       <Box
         sx={{
           width: "100%",

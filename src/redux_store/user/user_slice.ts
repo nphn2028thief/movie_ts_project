@@ -1,35 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-interface IFavorite {
-  accountId: string;
-  displayName: string;
-  mediaType: string;
-  mediaId: string;
-  mediaTitle: string;
-  mediaPoster: string;
-  mediaRate: number;
-}
+import { IFavorite } from "../../types/user";
+import { getMyFavorites } from "./user_actions";
 
 interface IState {
-  user: {
-    firstName: string;
-    lastName: string;
-    image: string;
-  } | null;
-  accessToken: string;
-  listFavorite: IFavorite[];
+  favoriteList: IFavorite[];
 }
 
 const initialState: IState = {
-  user: null,
-  accessToken: "",
-  listFavorite: [],
+  favoriteList: [],
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getMyFavorites.fulfilled, (state, action) => {
+      state.favoriteList = action.payload;
+    });
+  },
 });
 
 export default userSlice.reducer;

@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUser } from "../../types/auth";
-import { getMe, login } from "./auth_actions";
+import { getMe, login, register } from "./auth_actions";
 
 interface IState {
   userInfo: IUser | null;
+  accessToken: string;
 }
 
 const initialState: IState = {
   userInfo: null,
+  accessToken: "",
 };
 
 const authSlice = createSlice({
@@ -15,19 +17,19 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      localStorage.removeItem("accessToken");
+      state.accessToken = "";
       state.userInfo = null;
+      localStorage.removeItem("accessToken");
     },
   },
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
       const accessToken = action.payload.accessToken;
-      // state.accessToken = accessToken;
+      state.accessToken = accessToken;
       localStorage.setItem("accessToken", accessToken);
     });
     builder.addCase(getMe.fulfilled, (state, action) => {
       const userInfo = action.payload;
-      // state.accessToken = localStorage.getItem("accessToken") as string;
       state.userInfo = userInfo;
     });
   },

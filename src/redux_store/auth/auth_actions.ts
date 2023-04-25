@@ -19,7 +19,10 @@ export const register = createAsyncThunk(
   "auth/register",
   async (payload: IRegisterInfo, { rejectWithValue }) => {
     try {
-      const response = await publicClient.post(authEndpoints.register, payload);
+      const response = await publicClient.post<{ message: string }>(
+        authEndpoints.register,
+        payload
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error);

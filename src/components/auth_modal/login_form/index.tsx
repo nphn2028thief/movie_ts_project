@@ -1,16 +1,16 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Stack } from "@mui/material";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { ETYPE, ILoginInfo } from "../../../types/auth";
-import FormInput from "../../hook_form/form_input";
 import { useIsRequestPending } from "../../../hooks/use_status";
 import { useAppDispatch } from "../../../redux_store";
 import { getMe, login } from "../../../redux_store/auth/auth_actions";
-import { toastMessage } from "../../../utils/toast";
-import { useRef } from "react";
 import { setModalIsOpen } from "../../../redux_store/modal/modal_slice";
+import { ILoginInfo } from "../../../types/auth";
+import { toastMessage } from "../../../utils/toast";
+import FormInput from "../../hook_form/form_input";
 
 interface IProps {
   handleSwitchModalType: () => void;
