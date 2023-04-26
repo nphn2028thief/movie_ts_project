@@ -44,6 +44,15 @@ const theme = {
         ...customPalette,
       },
       components,
+      breakpoints: {
+        values: {
+          xs: 0,
+          sm: 740,
+          md: 1024,
+          lg: 1200,
+          xl: 1536,
+        },
+      },
     });
   },
 };

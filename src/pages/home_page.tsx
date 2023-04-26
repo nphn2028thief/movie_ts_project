@@ -6,10 +6,11 @@ import tmdbConfigs from "../api/configs/tmdb_configs";
 export default function HomePage() {
   return (
     <Wrapper>
-      <Slide
+      {/* <Slide
         mediaType={tmdbConfigs.mediaType.movie}
         mediaCategory={tmdbConfigs.mediaCategory.popular}
-      />
+      /> */}
+      <Box>Hello</Box>
     </Wrapper>
   );
 }

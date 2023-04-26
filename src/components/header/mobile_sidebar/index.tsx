@@ -4,7 +4,8 @@ import ui from "../../../configs/ui";
 import { CHeaderItem, CUserMenu } from "../../../constants/route_list";
 import { useAppDispatch, useAppSelector } from "../../../redux_store";
 import { setIsOpen } from "../../../redux_store/mobile_menu/mobile_menu_slice";
-import LoginButton from "../../login_button";
+import { setModalIsOpen } from "../../../redux_store/modal/modal_slice";
+import Button from "../../button";
 import Logo from "../../logo";
 import LogOutButton from "../../logout_button";
 import MobileSidebarItem from "./mobile_sidebar_item";
@@ -41,7 +42,15 @@ export default function MobileSidebar() {
             <MobileSidebarItem isMobile data={CUserMenu} mb={3} />
           ) : (
             <Box mb={3}>
-              <LoginButton width="100%" isMobile />
+              <Button
+                title="Log In"
+                width="100%"
+                isMobile
+                onClick={() => {
+                  dispatch(setIsOpen(false));
+                  dispatch(setModalIsOpen(true));
+                }}
+              />
             </Box>
           )}
 

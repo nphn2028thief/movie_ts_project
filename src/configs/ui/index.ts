@@ -7,7 +7,7 @@ const ui = {
       },
       light: {
         backgroundImage:
-          "linear-gradient(to top, rgba(245, 245, 245, 1), rgba(0, 0, 0, 0))",
+          "linear-gradient(to top, rgba(245, 245, 245, 0.6), rgba(0, 0, 0, 0))",
       },
     },
     horizontalGradientBackgroundImage: {
@@ -17,16 +17,15 @@ const ui = {
       },
       light: {
         backgroundImage:
-          "linear-gradient(to right, rgba(245, 245, 245, 1), rgba(0, 0, 0, 0))",
+          "linear-gradient(to right, rgba(245, 245, 245, 0.76), rgba(0, 0, 0, 0))",
       },
     },
-    typoLines: (lines: string, textAlign: string) => {
+    typoLines: (lines: number) => {
       return {
         display: "-webkit-box",
-        overFlow: "hidden",
+        overflow: "hidden",
         WebkitBoxOrient: "vertical",
         WebkitLineClamp: lines,
-        textAlign: textAlign || "justify",
       };
     },
     mainContent: {

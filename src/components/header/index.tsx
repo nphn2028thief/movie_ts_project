@@ -2,8 +2,8 @@ import { DarkModeOutlined, LightModeOutlined, Menu } from "@mui/icons-material";
 import {
   AppBar,
   Box,
-  Button,
   IconButton,
+  Button as MuiButton,
   Skeleton,
   Stack,
   Toolbar,
@@ -14,10 +14,11 @@ import { CHeaderItem } from "../../constants/route_list";
 import { useIsRequestPending } from "../../hooks/use_status";
 import { useAppDispatch, useAppSelector } from "../../redux_store";
 import { setIsOpen } from "../../redux_store/mobile_menu/mobile_menu_slice";
+import { setModalIsOpen } from "../../redux_store/modal/modal_slice";
 import { ETHEME } from "../../types/theme_mode";
 import { handleSwitchTheme } from "../../utils/function";
 import AuthModal from "../auth_modal";
-import LoginButton from "../login_button";
+import Button from "../button";
 import Logo from "../logo";
 import ModeWrapper from "../mode_wrapper";
 import MobileSidebar from "./mobile_sidebar";
@@ -62,7 +63,15 @@ export default function Header() {
       if (userInfo) {
         return <UserMenu />;
       } else {
-        return <LoginButton />;
+        return (
+          <Button
+            title="Log In"
+            onClick={() => {
+              dispatch(setIsOpen(false));
+              dispatch(setModalIsOpen(true));
+            }}
+          />
+        );
       }
     }
   };
@@ -138,7 +147,7 @@ export default function Header() {
               </Box>
 
               {CHeaderItem.map((item) => (
-                <Button
+                <MuiButton
                   key={item.id}
                   sx={{
                     minWidth: "71px",
@@ -152,7 +161,7 @@ export default function Header() {
                   onClick={() => item.path && navigate(item.path)}
                 >
                   {item.name}
-                </Button>
+                </MuiButton>
               ))}
 
               <IconButton
