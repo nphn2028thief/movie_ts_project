@@ -64,13 +64,21 @@ export default function Header() {
         return <UserMenu />;
       } else {
         return (
-          <Button
-            title="Log In"
-            onClick={() => {
-              dispatch(setIsOpen(false));
-              dispatch(setModalIsOpen(true));
+          <Box
+            display={{
+              xs: "none",
+              sm: "inline-block",
             }}
-          />
+          >
+            <Button
+              title="Log In"
+              width="fit-content"
+              onClick={() => {
+                dispatch(setIsOpen(false));
+                dispatch(setModalIsOpen(true));
+              }}
+            />
+          </Box>
         );
       }
     }

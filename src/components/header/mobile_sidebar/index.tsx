@@ -41,11 +41,16 @@ export default function MobileSidebar() {
           {userInfo ? (
             <MobileSidebarItem isMobile data={CUserMenu} mb={3} />
           ) : (
-            <Box mb={3}>
+            <Box
+              mb={3}
+              display={{
+                xs: "block",
+                sm: "none",
+              }}
+            >
               <Button
                 title="Log In"
                 width="100%"
-                isMobile
                 onClick={() => {
                   dispatch(setIsOpen(false));
                   dispatch(setModalIsOpen(true));

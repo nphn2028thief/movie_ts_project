@@ -1,16 +1,16 @@
 import { Box } from "@mui/material";
 import Wrapper from "./wrapper";
-import Slide from "../components/Slide";
+import Slideshow from "../components/slideshow";
 import tmdbConfigs from "../api/configs/tmdb_configs";
 
 export default function HomePage() {
   return (
     <Wrapper>
-      {/* <Slide
+      <Slideshow
         mediaType={tmdbConfigs.mediaType.movie}
         mediaCategory={tmdbConfigs.mediaCategory.popular}
-      /> */}
-      <Box>Hello</Box>
+      />
+      {/* <Box>Hello</Box> */}
     </Wrapper>
   );
 }
