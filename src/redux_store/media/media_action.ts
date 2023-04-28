@@ -1,6 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IGenre, IMedia } from "../../types/media";
+import { IGenre, IGenreList, IMedia } from "../../types/media";
 import publicClient from "../../api/client/public_client";
+
+const genreEndpoints = {
+  list: (mediaType: string) => `/genre/${mediaType}/list`,
+};
 
 const mediaEndpoints = {
   list: (mediaType: string, mediaCategory: string, page: number) =>
@@ -11,9 +15,20 @@ const mediaEndpoints = {
     `/${mediaType}?query=${q}&page=${page}`,
 };
 
-const genreEndpoints = {
-  list: (mediaType: string) => `/genre/${mediaType}/list`,
-};
+export const getGenreList = createAsyncThunk(
+  "media/getGenreList",
+  async (payload: { mediaType: string }, { rejectWithValue }) => {
+    try {
+      const response = await publicClient.get<IGenreList>(
+        genreEndpoints.list(payload.mediaType)
+      );
+
+      return response.data.genres;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 
 export const getMediaList = createAsyncThunk(
   "media/getMediaList",
@@ -28,21 +43,6 @@ export const getMediaList = createAsyncThunk(
       );
 
       return response.data.results;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
-
-export const getGenreList = createAsyncThunk(
-  "media/getGenreList",
-  async (payload: { mediaType: string }, { rejectWithValue }) => {
-    try {
-      const response = await publicClient.get<IGenre[]>(
-        genreEndpoints.list(payload.mediaType)
-      );
-
-      return response.data;
     } catch (error) {
       return rejectWithValue(error);
     }

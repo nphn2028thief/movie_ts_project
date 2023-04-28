@@ -1,8 +1,19 @@
 import { PlayArrow } from "@mui/icons-material";
-import { Box, Grow, Stack, Typography, Zoom, useTheme } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Grow,
+  Stack,
+  Typography,
+  Zoom,
+  useTheme,
+} from "@mui/material";
 import tmdbConfigs from "../../../api/configs/tmdb_configs";
 import ui from "../../../configs/ui";
 import Button from "../../button";
+import CircularRate from "../../circular_rate";
+import { useAppSelector } from "../../../redux_store";
+import { useEffect } from "react";
 
 interface IProps {
   data: any;
@@ -13,6 +24,8 @@ export default function SlideshowItem(props: IProps) {
   const { data, isActive } = props;
 
   const theme = useTheme();
+
+  const { genreList } = useAppSelector((state) => state.mediaSlice);
 
   return (
     <>
@@ -33,7 +46,7 @@ export default function SlideshowItem(props: IProps) {
             xs: "130%",
             sm: "80%",
             md: "60%",
-            lg: "45%",
+            lg: "44%",
           },
           backgroundPosition: "top",
           backgroundSize: "cover",
@@ -81,6 +94,37 @@ export default function SlideshowItem(props: IProps) {
                   {data.original_title || data.title}
                 </Typography>
               </Box>
+            </Grow>
+
+            <Grow
+              in={isActive}
+              style={{ transformOrigin: "0 0 0" }}
+              {...(isActive ? { timeout: 1500 } : { timeout: 500 })}
+            >
+              <Stack
+                direction="row"
+                justifyContent={{ xs: "center", sm: "flex-start" }}
+                alignItems="center"
+                spacing={2}
+              >
+                <CircularRate value={data.vote_average} />
+
+                {data.genre_ids
+                  .slice(0, 3)
+                  .map((genreId: number, index: number) => {
+                    const genreLabel = genreList?.find(
+                      (item) => item.id === genreId
+                    );
+
+                    return (
+                      <Chip
+                        key={index}
+                        color="primary"
+                        label={genreLabel && genreLabel.name}
+                      />
+                    );
+                  })}
+              </Stack>
             </Grow>
 
             <Grow
