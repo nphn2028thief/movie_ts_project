@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import React from "react";
 import ModeWrapper from "../components/mode_wrapper";
 
 interface IProps {
@@ -9,7 +8,7 @@ interface IProps {
 export default function Wrapper({ children }: IProps) {
   return (
     <ModeWrapper>
-      <Box mt={{ xs: 7, md: 8 }} height="100%">
+      <Box mt={{ xs: 7, md: 8 }} height="100%" paddingBottom={6}>
         {children}
       </Box>
     </ModeWrapper>

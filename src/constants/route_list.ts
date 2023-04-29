@@ -16,6 +16,7 @@ import {
 const HomePage = lazy(() => import("../pages/home_page"));
 const MoviePage = lazy(() => import("../pages/movie_page"));
 const TvSeriesPage = lazy(() => import("../pages/tv_series_page"));
+const DetailPage = lazy(() => import("../pages/detail_page"));
 const SearchPage = lazy(() => import("../pages/search_page"));
 const FavoritePage = lazy(() => import("../pages/favorite_page"));
 const ReviewPage = lazy(() => import("../pages/review_page"));
@@ -57,6 +58,14 @@ export const CRouteList: IRoute[] = [
   },
   {
     id: 4,
+    name: "Media Detail",
+    path: CPath.mediaDetail,
+    // icon: LiveTvOutlined,
+    page: DetailPage,
+    layout: DefaultLayout,
+  },
+  {
+    id: 5,
     name: "Search",
     path: CPath.search,
     //   path: (mediaType: string) => CPath.search(mediaType),
@@ -65,7 +74,7 @@ export const CRouteList: IRoute[] = [
     layout: DefaultLayout,
   },
   {
-    id: 5,
+    id: 6,
     name: "My Favorites",
     path: CPath.favoriteList,
     //   path: (mediaType: string) => CPath.search(mediaType),
@@ -74,7 +83,7 @@ export const CRouteList: IRoute[] = [
     layout: DefaultLayout,
   },
   {
-    id: 6,
+    id: 7,
     name: "My Reviews",
     path: CPath.reviewList,
     //   path: (mediaType: string) => CPath.search(mediaType),
@@ -83,7 +92,7 @@ export const CRouteList: IRoute[] = [
     layout: DefaultLayout,
   },
   {
-    id: 7,
+    id: 8,
     name: "My Profile",
     path: CPath.profile,
     //   path: (mediaType: string) => CPath.search(mediaType),
@@ -92,7 +101,7 @@ export const CRouteList: IRoute[] = [
     layout: DefaultLayout,
   },
   {
-    id: 8,
+    id: 9,
     name: "404 Error Not Found",
     path: CPath.notFound,
     page: NotFoundPage,

@@ -1,26 +1,19 @@
+import { IMedia } from "../../types/media";
+import { mediaEndpoints } from "../../utils/endpoint";
 import publicClient from "../client/public_client";
 
-const mediaEndpoints = {
-  list: (mediaType: string, mediaCategory: string, page: number) =>
-    `/${mediaType}/${mediaCategory}?page=${page}`,
-  detail: (mediaType: string, mediaId: string) =>
-    `/${mediaType}/detail/${mediaId}`,
-  search: (mediaType: string, q: string, page: number) =>
-    `/${mediaType}?query=${q}&page=${page}`,
-};
-
 const mediaApi = {
-  getMediaList: async (
-    mediaType: string,
-    mediaCategory: string,
-    page: number
-  ) => {
+  getMediaList: async (payload: IMedia) => {
     try {
-      const response = await publicClient.get<any[]>(
-        mediaEndpoints.list(mediaType, mediaCategory, page)
+      const response = await publicClient.get(
+        mediaEndpoints.list(
+          payload.mediaType,
+          payload.mediaCategory,
+          payload.page
+        )
       );
 
-      return response.data;
+      return response.data.results;
     } catch (error) {
       return error;
     }

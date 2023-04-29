@@ -6,18 +6,26 @@ export default function Footer() {
   return (
     <Box
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "372px",
-        height: "100%",
+        position: "relative",
         backgroundImage: `url(${footerImg})`,
         backgroundPosition: "top",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
+        paddingTop: {
+          xs: "60%",
+          md: "50%",
+          lg: "32%",
+        },
       }}
     >
-      <Logo color="#fff" />
+      <Box
+        position="absolute"
+        top="50%"
+        left="50%"
+        sx={{ transform: "translate(-50%, -50%)" }}
+      >
+        <Logo color="#fff" />
+      </Box>
     </Box>
   );
 }

@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import tmdbConfigs from "../../../api/configs/tmdb_configs";
 import ui from "../../../configs/ui";
+import { useAppSelector } from "../../../redux_store";
 import Button from "../../button";
 import CircularRate from "../../circular_rate";
-import { useAppSelector } from "../../../redux_store";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
   data: any;
@@ -24,6 +24,8 @@ export default function SlideshowItem(props: IProps) {
   const { data, isActive } = props;
 
   const theme = useTheme();
+
+  const navigate = useNavigate();
 
   const { genreList } = useAppSelector((state) => state.mediaSlice);
 
@@ -156,7 +158,7 @@ export default function SlideshowItem(props: IProps) {
                 <Button
                   title="Watch Now"
                   icon={<PlayArrow />}
-                  onClick={() => {}}
+                  onClick={() => navigate(`/movie/${data.id}`)}
                 />
               </Box>
             </Grow>

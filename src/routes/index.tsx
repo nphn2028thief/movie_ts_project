@@ -3,11 +3,12 @@ import { Route, Routes as Router } from "react-router-dom";
 import Loading from "../components/loading";
 import { CRouteList } from "../constants/route_list";
 import GlobalStyles from "./global_styles";
+import DefaultLayout from "../layouts/default_layout";
 
 export default function Routes() {
   return (
-    <GlobalStyles>
-      <Router>
+    <Router>
+      <Route path="/" element={<DefaultLayout />}>
         {CRouteList.map((item) => {
           const Page = item.page;
           const Layout = item.layout ? item.layout : Fragment;
@@ -17,16 +18,16 @@ export default function Routes() {
               key={item.id}
               path={item.path}
               element={
-                <Layout>
-                  <Suspense fallback={<Loading />}>
+                <Suspense fallback={<Loading />}>
+                  <GlobalStyles>
                     <Page />
-                  </Suspense>
-                </Layout>
+                  </GlobalStyles>
+                </Suspense>
               }
             />
           );
         })}
-      </Router>
-    </GlobalStyles>
+      </Route>
+    </Router>
   );
 }

@@ -11,6 +11,7 @@ const mediaType: IMediaType = {
 };
 
 const mediaCategory: IMediaCategory = {
+  latest: EMediaCategory.latest,
   popular: EMediaCategory.popular,
   top_rated: EMediaCategory.top_rated,
   now_playing: EMediaCategory.now_playing,

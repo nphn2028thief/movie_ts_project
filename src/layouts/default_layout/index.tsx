@@ -6,11 +6,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "../../redux_store";
 import { getMe } from "../../redux_store/auth/auth_actions";
 
-interface IProps {
-  children: JSX.Element;
-}
-
-export default function DefaultLayout(props: IProps) {
+export default function DefaultLayout() {
   const dispatch = useAppDispatch();
   const accessToken = localStorage.getItem("accessToken");
 
@@ -23,8 +19,7 @@ export default function DefaultLayout(props: IProps) {
   return (
     <>
       <Header />
-      <Box component="main" sx={{ height: "100vh" }}>
-        {props.children}
+      <Box component="main" flexGrow={1} overflow="hidden" minHeight="100vh">
         <Outlet />
       </Box>
       <Footer />

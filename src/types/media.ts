@@ -4,6 +4,7 @@ export enum EMediaType {
 }
 
 export enum EMediaCategory {
+  latest = "latest",
   popular = "popular",
   top_rated = "top_rated",
   now_playing = "now_playing",
@@ -18,12 +19,19 @@ export interface IMediaType {
 }
 
 export interface IMediaCategory {
+  latest: string;
   popular: string;
   top_rated: string;
   now_playing?: string;
   upcoming?: string;
   airing_today?: string;
   on_the_air?: string;
+}
+
+export interface ICategory {
+  id: number;
+  name: string;
+  category: string;
 }
 
 export interface IMedia {
