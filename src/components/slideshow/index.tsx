@@ -96,7 +96,7 @@ function Slideshow(props: IProps) {
         autoplay={{ delay: 3000, disableOnInteraction: false }}
         speed={1000}
       >
-        {mediaList?.slice(0, 5).map((item) => (
+        {mediaList.slice(0, 5).map((item) => (
           <SwiperSlide key={item.id}>
             {({ isActive }) => (
               <SlideshowItem

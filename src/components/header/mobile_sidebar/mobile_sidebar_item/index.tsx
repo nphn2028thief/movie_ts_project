@@ -13,14 +13,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../redux_store";
 import { setIsOpen } from "../../../../redux_store/mobile_menu/mobile_menu_slice";
 import { setModalIsOpen } from "../../../../redux_store/modal/modal_slice";
-import { IItem } from "../../../../types/route_list";
+
 import { ETHEME } from "../../../../types/theme_mode";
 import { handleSwitchTheme } from "../../../../utils/function";
+import { IMenu } from "../../../../types/route_list";
 
 interface IProps {
   isMobile?: boolean;
   title?: string;
-  data?: IItem[];
+  data?: IMenu[];
   mb?: number;
 }
 
@@ -34,7 +35,11 @@ export default function MobileSidebarItem(props: IProps) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const active = data ? data.findIndex((item) => item.path === pathname) : 0;
+  const active = data
+    ? data.findIndex((item) =>
+        item.state ? pathname.includes(item.state) : item.path === pathname
+      )
+    : 0;
 
   return (
     <Box

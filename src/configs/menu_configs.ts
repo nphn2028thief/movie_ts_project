@@ -9,6 +9,7 @@ import {
 } from "@mui/icons-material";
 import CPath from "../constants/path";
 import React from "react";
+import { IMenuConfig } from "../types/route_list";
 
 const HomePage = React.lazy(() => import("../pages/home_page"));
 const MediaPage = React.lazy(() => import("../pages/media_page"));
@@ -18,24 +19,6 @@ const FavoritePage = React.lazy(() => import("../pages/favorite_page"));
 const ReviewPage = React.lazy(() => import("../pages/review_page"));
 const ProfilePage = React.lazy(() => import("../pages/profile_page"));
 const NotFoundPage = React.lazy(() => import("../pages/not_found_page"));
-
-interface IMenu {
-  id: number;
-  name: string;
-  path: string;
-  icon: any;
-  state?: string;
-}
-
-interface IRoute extends Omit<IMenu, "icon"> {
-  page: React.LazyExoticComponent<() => JSX.Element>;
-}
-
-interface IMenuConfig {
-  main: IMenu[];
-  users: IMenu[];
-  routes: IRoute[];
-}
 
 const menuConfigs: IMenuConfig = {
   main: [

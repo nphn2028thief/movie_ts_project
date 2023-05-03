@@ -25,6 +25,8 @@ export default function UserMenu() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  const active = menuConfigs.users.findIndex((item) => item.path === pathname);
+
   // const handleGetMe = () => {
   //   if (isLoadingGetMe) {
   //     return (
@@ -90,9 +92,7 @@ export default function UserMenu() {
                 sx={{
                   minWidth: 180,
                   gap: 1,
-                  color: appState.includes(item.state)
-                    ? "primary.main"
-                    : "unset",
+                  color: item.id === active + 1 ? "primary.main" : "unset",
                 }}
                 onClick={() => {
                   item.path && navigate(item.path);
@@ -102,9 +102,7 @@ export default function UserMenu() {
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
-                    color: appState.includes(item.state)
-                      ? "primary.main"
-                      : "unset",
+                    color: item.id === active + 1 ? "primary.main" : "unset",
                   }}
                 >
                   <Icon fontSize="small" />
