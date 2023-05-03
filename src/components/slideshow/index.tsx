@@ -89,10 +89,10 @@ function Slideshow(props: IProps) {
 
     return (
       <Swiper
-        grabCursor={true}
-        loop={true}
+        slidesPerView={1}
+        spaceBetween={0}
         modules={[Autoplay]}
-        style={{ width: "100%", height: "max-content" }}
+        style={{ height: "max-content" }}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
         speed={1000}
       >
