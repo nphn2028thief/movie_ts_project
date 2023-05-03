@@ -41,7 +41,7 @@ export default function HomePage() {
           mediaCategory={tmdbConfigs.mediaCategory.popular}
         />
 
-        {/* <Box>
+        <Box>
           {mediaSlides.map((mediaSlide) => (
             <Container key={mediaSlide.id} title={mediaSlide.title}>
               <MediaSlide
@@ -50,7 +50,7 @@ export default function HomePage() {
               />
             </Container>
           ))}
-        </Box> */}
+        </Box>
       </Stack>
     </Wrapper>
   );
