@@ -4,7 +4,7 @@ import qs from "query-string";
 const baseURL =
   import.meta.env.VITE_REACT_NODE_ENV === "development"
     ? import.meta.env.VITE_REACT_DEV_API_URL
-    : process.env.VITE_REACT_API_URL;
+    : import.meta.env.VITE_REACT_API_URL;
 
 const controller = new AbortController();
 
