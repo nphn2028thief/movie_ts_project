@@ -8,26 +8,24 @@ import {
   Zoom,
   useTheme,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import tmdbConfigs from "../../../api/configs/tmdb_configs";
-import ui from "../../../configs/ui";
-import { useAppSelector } from "../../../redux_store";
+import uiConfigs from "../../../configs/ui_configs";
 import Button from "../../button";
 import CircularRate from "../../circular_rate";
-import { useNavigate } from "react-router-dom";
 
 interface IProps {
-  data: any;
+  mediaItem: any;
+  genreList: any[];
   isActive: boolean;
 }
 
 export default function SlideshowItem(props: IProps) {
-  const { data, isActive } = props;
+  const { mediaItem, genreList, isActive } = props;
 
   const theme = useTheme();
 
   const navigate = useNavigate();
-
-  const { genreList } = useAppSelector((state) => state.mediaSlice);
 
   return (
     <>
@@ -38,7 +36,9 @@ export default function SlideshowItem(props: IProps) {
           position: "absolute",
           left: 0,
           top: 0,
-          ...ui.style.horizontalGradientBackgroundImage[theme.palette.mode],
+          ...uiConfigs.style.horizontalGradientBackgroundImage[
+            theme.palette.mode
+          ],
         }}
       />
 
@@ -53,7 +53,7 @@ export default function SlideshowItem(props: IProps) {
           backgroundPosition: "top",
           backgroundSize: "cover",
           backgroundImage: `url(${tmdbConfigs.backdropPath(
-            data.backdrop_path || data.poster_path
+            mediaItem.backdrop_path || mediaItem.poster_path
           )})`,
         }}
       >
@@ -91,9 +91,9 @@ export default function SlideshowItem(props: IProps) {
                     sm: "left",
                   }}
                   letterSpacing="1px"
-                  sx={{ ...ui.style.typoLines(2) }}
+                  sx={{ ...uiConfigs.style.typoLines(2) }}
                 >
-                  {data.original_title || data.title}
+                  {mediaItem.original_title || mediaItem.title}
                 </Typography>
               </Box>
             </Grow>
@@ -109,9 +109,9 @@ export default function SlideshowItem(props: IProps) {
                 alignItems="center"
                 spacing={2}
               >
-                <CircularRate value={data.vote_average} />
+                <CircularRate value={mediaItem.vote_average} />
 
-                {data.genre_ids
+                {mediaItem.genre_ids
                   .slice(0, 3)
                   .map((genreId: number, index: number) => {
                     const genreLabel = genreList?.find(
@@ -142,9 +142,9 @@ export default function SlideshowItem(props: IProps) {
                   }}
                   fontWeight={600}
                   letterSpacing="1px"
-                  sx={{ ...ui.style.typoLines(3) }}
+                  sx={{ ...uiConfigs.style.typoLines(3) }}
                 >
-                  {data.overview}
+                  {mediaItem.overview}
                 </Typography>
               </Box>
             </Grow>
@@ -158,7 +158,7 @@ export default function SlideshowItem(props: IProps) {
                 <Button
                   title="Watch Now"
                   icon={<PlayArrow />}
-                  onClick={() => navigate(`/movie/${data.id}`)}
+                  onClick={() => navigate(`/movie/${mediaItem.id}`)}
                 />
               </Box>
             </Grow>
@@ -183,7 +183,7 @@ export default function SlideshowItem(props: IProps) {
                 backgroundPosition: "top",
                 backgroundSize: "cover",
                 backgroundImage: `url(${tmdbConfigs.backdropPath(
-                  data.backdrop_path || data.poster_path
+                  mediaItem.backdrop_path || mediaItem.poster_path
                 )})`,
                 borderRadius: "30px",
                 boxShadow: "0 7px 29px 0 hsla(240, 5%, 41%, 0.2)",

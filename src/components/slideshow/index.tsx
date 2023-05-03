@@ -1,15 +1,14 @@
-import { Box, CircularProgress, useTheme } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
+import { memo, useEffect, useState } from "react";
 import { Autoplay } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-import publicClient from "../../api/client/public_client";
+import genreApi from "../../api/http/genre_api";
 import mediaApi from "../../api/http/media_api";
-import ui from "../../configs/ui";
-import { IGenre, IGenreList } from "../../types/media";
-import { genreEndpoints } from "../../utils/endpoint";
+import uiConfigs from "../../configs/ui_configs";
+import { IGenre } from "../../types/media";
 import { toastMessage } from "../../utils/toast";
 import Button from "../button";
 import SlideshowItem from "./slideshow_item";
@@ -20,55 +19,38 @@ interface IProps {
   mediaCategory: string;
 }
 
-export default function Slideshow(props: IProps) {
+function Slideshow(props: IProps) {
   const { mediaType, mediaCategory } = props;
 
   const theme = useTheme();
 
   const [genreList, setGenreList] = useState<IGenre[]>([]);
   const [mediaList, setMediaList] = useState<any[]>([]);
-  const [isLoadingGetGenre, setIsLoadingGetGenre] = useState<boolean>(false);
-  const [isLoadingGetMedia, setIsLoadingGetMedia] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
-  const handleTryAgain = () => {
+  const handleTryAgain = async () => {
     setIsError(false);
-    setIsLoadingGetGenre(true);
+    setIsLoading(true);
 
-    const getGenreList = async (mediaType: string) => {
-      try {
-        const response = await publicClient.get<IGenreList>(
-          genreEndpoints.list(mediaType)
-        );
-
-        return response.data.genres;
-      } catch (error: any) {
-        setIsError(true);
-        return error;
-      }
-    };
-
-    getGenreList(mediaType)
-      .then((data) => {
-        setGenreList(data);
-        setIsLoadingGetMedia(true);
+    genreApi
+      .getGenreList(mediaType)
+      .then((res) => {
+        setGenreList(res.data.genres);
 
         mediaApi
           .getMediaList({ mediaType, mediaCategory, page: 1 })
-          .then((data) => {
-            setMediaList(data);
-            setIsLoadingGetMedia(false);
-          })
+          .then((res) => setMediaList(res.data.results))
           .catch((error) => {
-            toastMessage.error(error.message || "System is error!");
-            setIsLoadingGetMedia(false);
-          });
-
-        setIsLoadingGetGenre(false);
+            setIsError(true);
+            toastMessage.error(error || "System is error!");
+          })
+          .finally(() => setIsLoading(false));
       })
       .catch((error) => {
-        toastMessage.error(error.message || "System is error!");
-        setIsLoadingGetGenre(false);
+        setIsLoading(false);
+        setIsError(true);
+        toastMessage.error(error || "System is error!");
       });
   };
 
@@ -76,12 +58,8 @@ export default function Slideshow(props: IProps) {
     handleTryAgain();
   }, [mediaType, mediaCategory]);
 
-  useEffect(() => {
-    console.log(isError);
-  }, []);
-
   const handleShowSlide = () => {
-    if (isLoadingGetGenre || isLoadingGetMedia) {
+    if (isLoading) {
       return (
         <WrapperSlideshow>
           <CircularProgress size={28} thickness={6} color="error" />
@@ -101,6 +79,14 @@ export default function Slideshow(props: IProps) {
       );
     }
 
+    if (!genreList || !mediaList) {
+      return (
+        <WrapperSlideshow>
+          <Typography>No data!</Typography>
+        </WrapperSlideshow>
+      );
+    }
+
     return (
       <Swiper
         grabCursor={true}
@@ -110,10 +96,14 @@ export default function Slideshow(props: IProps) {
         autoplay={{ delay: 3000, disableOnInteraction: false }}
         speed={1000}
       >
-        {mediaList?.slice(0, 5).map((item) => (
+        {mediaList.slice(0, 5).map((item) => (
           <SwiperSlide key={item.id}>
             {({ isActive }) => (
-              <SlideshowItem data={item} isActive={isActive} />
+              <SlideshowItem
+                mediaItem={item}
+                genreList={genreList}
+                isActive={isActive}
+              />
             )}
           </SwiperSlide>
         ))}
@@ -135,7 +125,7 @@ export default function Slideshow(props: IProps) {
           bottom: 0,
           zIndex: 2,
           pointerEvents: "none",
-          ...ui.style.gradientBackgroundImage[theme.palette.mode],
+          ...uiConfigs.style.gradientBackgroundImage[theme.palette.mode],
         },
       }}
     >
@@ -143,3 +133,5 @@ export default function Slideshow(props: IProps) {
     </Box>
   );
 }
+
+export default memo(Slideshow);

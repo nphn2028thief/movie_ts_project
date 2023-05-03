@@ -1,10 +1,9 @@
 import { Box, Stack } from "@mui/material";
 import tmdbConfigs from "../api/configs/tmdb_configs";
 import Container from "../components/container";
+import MediaSlide from "../components/media_slide";
 import Slideshow from "../components/slideshow";
 import Wrapper from "./wrapper";
-import MediaSlide from "../components/media_slide";
-import ui from "../configs/ui";
 
 const mediaSlides = [
   {

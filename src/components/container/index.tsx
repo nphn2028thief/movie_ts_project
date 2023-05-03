@@ -1,5 +1,5 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import ui from "../../configs/ui";
+import uiConfigs from "../../configs/ui_configs";
 
 interface IProps {
   title: string;
@@ -25,7 +25,7 @@ export default function Container(props: IProps) {
           <Box
             sx={{
               position: "relative",
-              maxWidth: ui.style.size.contentMaxWidth,
+              maxWidth: uiConfigs.style.size.contentMaxWidth,
               width: "max-content",
               "&:before": {
                 content: '""',
@@ -40,6 +40,10 @@ export default function Container(props: IProps) {
           >
             <Typography
               variant="h6"
+              fontSize={{
+                xs: "1.25rem",
+                md: "1.5rem",
+              }}
               fontWeight={700}
               textTransform="capitalize"
             >

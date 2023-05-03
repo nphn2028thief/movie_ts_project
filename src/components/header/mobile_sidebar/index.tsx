@@ -1,7 +1,7 @@
 import { Box, Drawer, List, Toolbar } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
-import ui from "../../../configs/ui";
-import { CHeaderItem, CUserMenu } from "../../../constants/route_list";
+import { useNavigate } from "react-router-dom";
+import menuConfigs from "../../../configs/menu_configs";
+import uiConfigs from "../../../configs/ui_configs";
 import { useAppDispatch, useAppSelector } from "../../../redux_store";
 import { setIsOpen } from "../../../redux_store/mobile_menu/mobile_menu_slice";
 import { setModalIsOpen } from "../../../redux_store/modal/modal_slice";
@@ -11,17 +11,13 @@ import LogOutButton from "../../logout_button";
 import MobileSidebarItem from "./mobile_sidebar_item";
 
 export default function MobileSidebar() {
-  const { themeMode } = useAppSelector((state) => state.modeSlice);
   const { userInfo } = useAppSelector((state) => state.authSlice);
   const { isOpen } = useAppSelector((state) => state.mobileMenuSlice);
   const dispatch = useAppDispatch();
 
-  const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  // const active = CHeaderItem.findIndex((item) => item.path === pathname);
-
-  const mobileSidebarWidth = ui.style.size.sidebarWidth;
+  const mobileSidebarWidth = uiConfigs.style.size.sidebarWidth;
 
   const renderItemDrawer = () => {
     return (
@@ -39,7 +35,7 @@ export default function MobileSidebar() {
 
         <List sx={{ padding: "8px 30px", overflow: "overlay" }}>
           {userInfo ? (
-            <MobileSidebarItem isMobile data={CUserMenu} mb={3} />
+            <MobileSidebarItem isMobile data={menuConfigs.users} mb={3} />
           ) : (
             <Box
               mb={3}
@@ -59,7 +55,7 @@ export default function MobileSidebar() {
             </Box>
           )}
 
-          <MobileSidebarItem title="Menu" data={CHeaderItem} mb={3} />
+          <MobileSidebarItem title="Menu" data={menuConfigs.main} mb={3} />
 
           <MobileSidebarItem title="Theme" />
 

@@ -8,9 +8,9 @@ import {
   Stack,
   Toolbar,
 } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CHeaderItem } from "../../constants/route_list";
+import menuConfigs from "../../configs/menu_configs";
 import { useIsRequestPending } from "../../hooks/use_status";
 import { useAppDispatch, useAppSelector } from "../../redux_store";
 import { setIsOpen } from "../../redux_store/mobile_menu/mobile_menu_slice";
@@ -25,6 +25,7 @@ import MobileSidebar from "./mobile_sidebar";
 import UserMenu from "./user_menu";
 
 export default function Header() {
+  // const { appState } = useAppSelector((state) => state.appSlice);
   const { themeMode } = useAppSelector((state) => state.modeSlice);
   const { userInfo } = useAppSelector((state) => state.authSlice);
   const { isOpen } = useAppSelector((state) => state.mobileMenuSlice);
@@ -35,6 +36,10 @@ export default function Header() {
 
   const isLoadingGetMe = useIsRequestPending("auth", "getMe");
 
+  const active = menuConfigs.main.findIndex((item) =>
+    item.state ? pathname.includes(item.state) : item.path === pathname
+  );
+
   document.title =
     pathname.split("/")[1] === ""
       ? "MoonFlix"
@@ -42,8 +47,6 @@ export default function Header() {
           pathname.split("/")[1].charAt(0).toUpperCase() +
           pathname.split("/")[1].slice(1).toLowerCase()
         }`;
-
-  const active = CHeaderItem.findIndex((item) => item.path === pathname);
 
   const handleGetMe = () => {
     if (isLoadingGetMe) {
@@ -154,7 +157,7 @@ export default function Header() {
                 <Logo />
               </Box>
 
-              {CHeaderItem.map((item) => (
+              {menuConfigs.main.map((item) => (
                 <MuiButton
                   key={item.id}
                   sx={{
@@ -166,7 +169,9 @@ export default function Header() {
                     padding: "6px 16px",
                   }}
                   variant={item.id === active + 1 ? "contained" : "text"}
-                  onClick={() => item.path && navigate(item.path)}
+                  onClick={() => {
+                    navigate(item.path);
+                  }}
                 >
                   {item.name}
                 </MuiButton>

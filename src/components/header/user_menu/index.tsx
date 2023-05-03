@@ -10,11 +10,12 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CUserMenu } from "../../../constants/route_list";
+import menuConfigs from "../../../configs/menu_configs";
 import { useAppDispatch, useAppSelector } from "../../../redux_store";
 import LogOutButton from "../../logout_button";
 
 export default function UserMenu() {
+  const { appState } = useAppSelector((state) => state.appSlice);
   const { userInfo } = useAppSelector((state) => state.authSlice);
   const { themeMode } = useAppSelector((state) => state.modeSlice);
   const dispatch = useAppDispatch();
@@ -23,8 +24,6 @@ export default function UserMenu() {
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
-  const active = CUserMenu.findIndex((item) => item.path === pathname);
 
   // const handleGetMe = () => {
   //   if (isLoadingGetMe) {
@@ -82,7 +81,7 @@ export default function UserMenu() {
         onClose={() => setAnchorEl(null)}
         PaperProps={{ sx: { padding: 0, top: "58px !important" } }}
       >
-        {CUserMenu.map((item) => {
+        {menuConfigs.main.map((item) => {
           const Icon = item.icon;
 
           return (
@@ -91,7 +90,9 @@ export default function UserMenu() {
                 sx={{
                   minWidth: 180,
                   gap: 1,
-                  color: item.id === active + 1 ? "primary.main" : "unset",
+                  color: appState.includes(item.state)
+                    ? "primary.main"
+                    : "unset",
                 }}
                 onClick={() => {
                   item.path && navigate(item.path);
@@ -101,7 +102,9 @@ export default function UserMenu() {
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
-                    color: item.id === active + 1 ? "primary.main" : "unset",
+                    color: appState.includes(item.state)
+                      ? "primary.main"
+                      : "unset",
                   }}
                 >
                   <Icon fontSize="small" />

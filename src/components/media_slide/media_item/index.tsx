@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../../../redux_store";
-import tmdbConfigs from "../../../api/configs/tmdb_configs";
-import { Link } from "react-router-dom";
 import { Box } from "@mui/material";
-import ui from "../../../configs/ui";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import tmdbConfigs from "../../../api/configs/tmdb_configs";
+import uiConfigs from "../../../configs/ui_configs";
+import { useAppSelector } from "../../../redux_store";
 
 interface IProps {
   mediaType: string;
@@ -46,7 +46,7 @@ export default function MediaItem(props: IProps) {
     >
       <Box
         sx={{
-          ...ui.style.backgroundImage(posterPath),
+          ...uiConfigs.style.backgroundImage(posterPath),
           paddingTop: "160%",
           "&:hover .media_info": {
             opacity: 1,

@@ -34,7 +34,7 @@ const setMode = (mode: string) => {
   };
 };
 
-const theme = {
+const themeConfigs = {
   custom: ({ mode }: { mode: PaletteMode }) => {
     const customPalette = setMode(mode);
 
@@ -57,4 +57,4 @@ const theme = {
   },
 };
 
-export default theme;
+export default themeConfigs;

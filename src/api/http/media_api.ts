@@ -3,20 +3,27 @@ import { mediaEndpoints } from "../../utils/endpoint";
 import publicClient from "../client/public_client";
 
 const mediaApi = {
-  getMediaList: async (payload: IMedia) => {
-    try {
-      const response = await publicClient.get(
-        mediaEndpoints.list(
-          payload.mediaType,
-          payload.mediaCategory,
-          payload.page
-        )
-      );
+  getMediaList: (payload: IMedia) => {
+    // try {
+    //   const response = await publicClient.get(
+    //     mediaEndpoints.list(
+    //       payload.mediaType,
+    //       payload.mediaCategory,
+    //       payload.page
+    //     )
+    //   );
 
-      return response.data.results;
-    } catch (error) {
-      return error;
-    }
+    //   return response.data.results;
+    // } catch (error: any) {
+    //   return error;
+    // }
+    return publicClient.get(
+      mediaEndpoints.list(
+        payload.mediaType,
+        payload.mediaCategory,
+        payload.page
+      )
+    );
   },
 
   getMediaDetail: async (mediaType: string, mediaId: string) => {

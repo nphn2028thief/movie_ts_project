@@ -1,4 +1,4 @@
-const ui = {
+const uiConfigs = {
   style: {
     gradientBackgroundImage: {
       dark: {
@@ -46,4 +46,4 @@ const ui = {
   },
 };
 
-export default ui;
+export default uiConfigs;
