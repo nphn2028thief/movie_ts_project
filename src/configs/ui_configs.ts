@@ -26,6 +26,7 @@ const uiConfigs = {
         overflow: "hidden",
         WebkitBoxOrient: "vertical",
         WebkitLineClamp: lines,
+        textOverflow: "ellipsis",
       };
     },
     mainContent: {
