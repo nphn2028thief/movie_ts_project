@@ -1,11 +1,10 @@
-import { Box, Drawer, List, Toolbar } from "@mui/material";
+import { Box, Button, Drawer, List, Toolbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import menuConfigs from "../../../configs/menu_configs";
 import uiConfigs from "../../../configs/ui_configs";
 import { useAppDispatch, useAppSelector } from "../../../redux_store";
 import { setIsOpen } from "../../../redux_store/mobile_menu/mobile_menu_slice";
 import { setModalIsOpen } from "../../../redux_store/modal/modal_slice";
-import Button from "../../button";
 import Logo from "../../logo";
 import LogOutButton from "../../logout_button";
 import MobileSidebarItem from "./mobile_sidebar_item";
@@ -40,18 +39,22 @@ export default function MobileSidebar() {
             <Box
               mb={3}
               display={{
-                xs: "block",
+                xs: "flex",
                 sm: "none",
               }}
             >
               <Button
-                title="Log In"
-                width="100%"
+                variant="contained"
+                sx={{
+                  width: "100%",
+                }}
                 onClick={() => {
                   dispatch(setIsOpen(false));
                   dispatch(setModalIsOpen(true));
                 }}
-              />
+              >
+                LOG IN
+              </Button>
             </Box>
           )}
 

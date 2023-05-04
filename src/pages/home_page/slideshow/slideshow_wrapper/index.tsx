@@ -4,7 +4,7 @@ interface IProps {
   children: JSX.Element;
 }
 
-export default function WrapperSlideshow(props: IProps) {
+export default function SlideshowWrapper(props: IProps) {
   const { children } = props;
 
   return (

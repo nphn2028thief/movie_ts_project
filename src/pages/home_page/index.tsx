@@ -1,11 +1,18 @@
 import { Box, Stack } from "@mui/material";
-import tmdbConfigs from "../api/configs/tmdb_configs";
-import Container from "../components/container";
-import MediaSlide from "../components/media_slide";
-import Slideshow from "../components/slideshow";
-import Wrapper from "./wrapper";
+import tmdbConfigs from "../../api/configs/tmdb_configs";
+import Container from "../../components/container";
+import Wrapper from "../wrapper";
+import MediaSection from "./media_section";
+import Slideshow from "./slideshow";
 
-const mediaSlides = [
+interface IMediaSlide {
+  id: number;
+  title: string;
+  type: string;
+  category: string;
+}
+
+const mediaSlides: IMediaSlide[] = [
   {
     id: 1,
     title: "popular movies",
@@ -44,7 +51,7 @@ export default function HomePage() {
         <Box>
           {mediaSlides.map((mediaSlide) => (
             <Container key={mediaSlide.id} title={mediaSlide.title}>
-              <MediaSlide
+              <MediaSection
                 mediaType={mediaSlide.type}
                 mediaCategory={mediaSlide.category}
               />

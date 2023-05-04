@@ -21,7 +21,10 @@ export default function Container(props: IProps) {
       }}
     >
       <Stack spacing={4}>
-        <Stack direction="row" justifyContent="space-between">
+        <Stack
+          direction="row"
+          justifyContent={title ? "space-between" : "flex-end"}
+        >
           <Box
             sx={{
               position: "relative",
@@ -51,14 +54,8 @@ export default function Container(props: IProps) {
             </Typography>
           </Box>
 
-          <Button
-            variant="outlined"
-            sx={{
-              textTransform: "capitalize",
-              letterSpacing: 2,
-            }}
-          >
-            watch more
+          <Button variant="outlined" sx={{ letterSpacing: 2 }}>
+            Watch more
           </Button>
         </Stack>
         {children}

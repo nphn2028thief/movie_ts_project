@@ -1,18 +1,23 @@
-import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { memo, useEffect, useState } from "react";
 import { Autoplay } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-import genreApi from "../../api/http/genre_api";
-import mediaApi from "../../api/http/media_api";
-import uiConfigs from "../../configs/ui_configs";
-import { IGenre } from "../../types/media";
-import { toastMessage } from "../../utils/toast";
-import Button from "../button";
+import genreApi from "../../../api/http/genre_api";
+import mediaApi from "../../../api/http/media_api";
+import uiConfigs from "../../../configs/ui_configs";
+import { IGenre } from "../../../types/media";
+import { toastMessage } from "../../../utils/toast";
 import SlideshowItem from "./slideshow_item";
-import WrapperSlideshow from "./wrapper_slide_show";
+import SlideshowWrapper from "./slideshow_wrapper";
 
 interface IProps {
   mediaType: string;
@@ -61,29 +66,27 @@ function Slideshow(props: IProps) {
   const handleShowSlide = () => {
     if (isLoading) {
       return (
-        <WrapperSlideshow>
+        <SlideshowWrapper>
           <CircularProgress size={28} thickness={6} color="error" />
-        </WrapperSlideshow>
+        </SlideshowWrapper>
       );
     }
 
     if (isError) {
       return (
-        <WrapperSlideshow>
-          <Button
-            title="Try Again"
-            width="fit-content"
-            onClick={handleTryAgain}
-          />
-        </WrapperSlideshow>
+        <SlideshowWrapper>
+          <Button sx={{ width: "fit-content" }} onClick={handleTryAgain}>
+            Try Again
+          </Button>
+        </SlideshowWrapper>
       );
     }
 
     if (!genreList || !mediaList) {
       return (
-        <WrapperSlideshow>
+        <SlideshowWrapper>
           <Typography>No data!</Typography>
-        </WrapperSlideshow>
+        </SlideshowWrapper>
       );
     }
 

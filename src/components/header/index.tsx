@@ -3,12 +3,12 @@ import {
   AppBar,
   Box,
   IconButton,
-  Button as MuiButton,
+  Button,
   Skeleton,
   Stack,
   Toolbar,
 } from "@mui/material";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import menuConfigs from "../../configs/menu_configs";
 import { useIsRequestPending } from "../../hooks/use_status";
@@ -18,7 +18,6 @@ import { setModalIsOpen } from "../../redux_store/modal/modal_slice";
 import { ETHEME } from "../../types/theme_mode";
 import { handleSwitchTheme } from "../../utils/function";
 import AuthModal from "../auth_modal";
-import Button from "../button";
 import Logo from "../logo";
 import ModeWrapper from "../mode_wrapper";
 import MobileSidebar from "./mobile_sidebar";
@@ -70,17 +69,29 @@ export default function Header() {
           <Box
             display={{
               xs: "none",
-              sm: "inline-block",
+              sm: "inline-flex",
             }}
           >
             <Button
-              title="Log In"
-              width="fit-content"
+              variant="contained"
+              sx={{ width: "fit-content" }}
               onClick={() => {
                 dispatch(setIsOpen(false));
                 dispatch(setModalIsOpen(true));
               }}
-            />
+            >
+              LOG IN
+            </Button>
+
+            {/* <Button
+              title="Log In"
+              width="fit-content"
+              textTransform="uppercase"
+              onClick={() => {
+                dispatch(setIsOpen(false));
+                dispatch(setModalIsOpen(true));
+              }}
+            /> */}
           </Box>
         );
       }
@@ -158,7 +169,7 @@ export default function Header() {
               </Box>
 
               {menuConfigs.main.map((item) => (
-                <MuiButton
+                <Button
                   key={item.id}
                   sx={{
                     minWidth: "71px",
@@ -174,7 +185,7 @@ export default function Header() {
                   }}
                 >
                   {item.name}
-                </MuiButton>
+                </Button>
               ))}
 
               <IconButton

@@ -3,7 +3,6 @@ import { Route, Routes as Router } from "react-router-dom";
 import Loading from "../components/loading";
 import menuConfigs from "../configs/menu_configs";
 import DefaultLayout from "../layouts/default_layout";
-import GlobalStyles from "./global_styles";
 
 export default function Routes() {
   return (
@@ -18,9 +17,7 @@ export default function Routes() {
               path={item.path}
               element={
                 <Suspense fallback={<Loading />}>
-                  <GlobalStyles state={item.state}>
-                    <Page />
-                  </GlobalStyles>
+                  <Page />
                 </Suspense>
               }
             />

@@ -1,6 +1,7 @@
 import { PlayArrow } from "@mui/icons-material";
 import {
   Box,
+  Button,
   Chip,
   Grow,
   Stack,
@@ -9,10 +10,9 @@ import {
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import tmdbConfigs from "../../../api/configs/tmdb_configs";
-import uiConfigs from "../../../configs/ui_configs";
-import Button from "../../button";
-import CircularRate from "../../circular_rate";
+import tmdbConfigs from "../../../../api/configs/tmdb_configs";
+import uiConfigs from "../../../../configs/ui_configs";
+import CircularRate from "../../../../components/circular_rate";
 
 interface IProps {
   mediaItem: any;
@@ -156,10 +156,18 @@ export default function SlideshowItem(props: IProps) {
             >
               <Box>
                 <Button
-                  title="Watch Now"
-                  icon={<PlayArrow />}
+                  variant="contained"
+                  sx={{
+                    width: {
+                      xs: "100%",
+                      sm: "fit-content",
+                    },
+                  }}
+                  startIcon={<PlayArrow />}
                   onClick={() => navigate(`/movie/${mediaItem.id}`)}
-                />
+                >
+                  Watch Now
+                </Button>
               </Box>
             </Grow>
           </Stack>

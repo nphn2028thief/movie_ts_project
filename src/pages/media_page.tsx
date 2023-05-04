@@ -1,8 +1,10 @@
 import { Box, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Wrapper from "./wrapper";
 
 export default function MediaPage() {
+  const { mediaType } = useParams();
+
   return (
     <Wrapper>
       <Box>

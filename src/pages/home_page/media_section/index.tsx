@@ -1,18 +1,16 @@
-import { Box, CircularProgress, Skeleton, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import mediaApi from "../../api/http/media_api";
-import { toastMessage } from "../../utils/toast";
-import Button from "../button";
-import MediaItem from "./media_item";
-import SkeletonLoading from "../skeleton_loading";
+import mediaApi from "../../../api/http/media_api";
+import CardItem from "../../../components/card_item";
+import { toastMessage } from "../../../utils/toast";
 
 interface IProps {
   mediaType: string;
   mediaCategory: string;
 }
 
-export default function MediaSlide(props: IProps) {
+export default function MediaSection(props: IProps) {
   const { mediaType, mediaCategory } = props;
 
   const [mediaList, setMediaList] = useState<any[]>([]);
@@ -59,11 +57,9 @@ export default function MediaSlide(props: IProps) {
           alignItems="center"
           height={200}
         >
-          <Button
-            title="Try Again"
-            width="fit-content"
-            onClick={handleTryAgain}
-          />
+          <Button sx={{ width: "fit-content" }} onClick={handleTryAgain}>
+            Try Again
+          </Button>
         </Box>
       );
     }
@@ -90,7 +86,7 @@ export default function MediaSlide(props: IProps) {
       >
         {mediaList.map((item) => (
           <SwiperSlide key={item.id}>
-            <MediaItem data={item} mediaType={mediaType} />
+            <CardItem data={item} mediaType={mediaType} />
           </SwiperSlide>
         ))}
       </Swiper>

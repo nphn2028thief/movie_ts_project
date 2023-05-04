@@ -1,4 +1,4 @@
-import { IMedia } from "../../types/media";
+import { IMedia, IMediaResponse } from "../../types/media";
 import { mediaEndpoints } from "../../utils/endpoint";
 import publicClient from "../client/public_client";
 
@@ -17,7 +17,7 @@ const mediaApi = {
     // } catch (error: any) {
     //   return error;
     // }
-    return publicClient.get(
+    return publicClient.get<IMediaResponse>(
       mediaEndpoints.list(
         payload.mediaType,
         payload.mediaCategory,

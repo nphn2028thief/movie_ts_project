@@ -28,18 +28,20 @@ export interface IMediaCategory {
   on_the_air?: string;
 }
 
-export interface ICategory {
-  id: number;
-  name: string;
-  category: string;
-}
+// export interface ICategory {
+//   id: number;
+//   name: string;
+//   category: string;
+// }
 
+// Type for payload getMediaList API
 export interface IMedia {
   mediaType: string;
   mediaCategory: string;
   page: number;
 }
 
+// Response for getGenreList API
 export interface IGenre {
   id: number;
   name: string;
@@ -47,4 +49,29 @@ export interface IGenre {
 
 export interface IGenreList {
   genres: IGenre[];
+}
+
+// Response for getMediaList API
+export interface IMediaResult {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+export interface IMediaResponse {
+  page: number;
+  results: IMediaResult[];
+  total_pages: number;
+  total_results: number;
 }

@@ -2,7 +2,6 @@ import { DarkModeOutlined, LightModeOutlined } from "@mui/icons-material";
 import {
   Avatar,
   Box,
-  Button,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -12,11 +11,10 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../redux_store";
 import { setIsOpen } from "../../../../redux_store/mobile_menu/mobile_menu_slice";
-import { setModalIsOpen } from "../../../../redux_store/modal/modal_slice";
 
+import { IMenu } from "../../../../types/route_list";
 import { ETHEME } from "../../../../types/theme_mode";
 import { handleSwitchTheme } from "../../../../utils/function";
-import { IMenu } from "../../../../types/route_list";
 
 interface IProps {
   isMobile?: boolean;

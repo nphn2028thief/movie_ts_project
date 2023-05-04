@@ -15,7 +15,6 @@ import { useAppDispatch, useAppSelector } from "../../../redux_store";
 import LogOutButton from "../../logout_button";
 
 export default function UserMenu() {
-  const { appState } = useAppSelector((state) => state.appSlice);
   const { userInfo } = useAppSelector((state) => state.authSlice);
   const { themeMode } = useAppSelector((state) => state.modeSlice);
   const dispatch = useAppDispatch();
@@ -83,7 +82,7 @@ export default function UserMenu() {
         onClose={() => setAnchorEl(null)}
         PaperProps={{ sx: { padding: 0, top: "58px !important" } }}
       >
-        {menuConfigs.main.map((item) => {
+        {menuConfigs.users.map((item) => {
           const Icon = item.icon;
 
           return (
