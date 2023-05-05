@@ -2,11 +2,11 @@ import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useIsRequestPending } from "../hooks/use_status";
 import { useAppDispatch, useAppSelector } from "../redux_store";
-import { getMyFavorites } from "../redux_store/user/user_actions";
 import Wrapper from "./wrapper";
+import { getMyFavorite } from "../redux_store/favorite/favorite_actions";
 
 export default function FavoritePage() {
-  const { favoriteList } = useAppSelector((state) => state.userSlice);
+  const { favoriteList } = useAppSelector((state) => state.favoriteSlice);
   const dispatch = useAppDispatch();
 
   const isLoadingGetFavoriteList = useIsRequestPending(
@@ -14,9 +14,9 @@ export default function FavoritePage() {
     "getMyFavorites"
   );
 
-  useEffect(() => {
-    dispatch(getMyFavorites());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getMyFavorite());
+  // }, []);
 
   return (
     <Wrapper>
