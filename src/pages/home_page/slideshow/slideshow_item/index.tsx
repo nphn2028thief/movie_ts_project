@@ -48,7 +48,7 @@ export default function SlideshowItem(props: IProps) {
             xs: "130%",
             sm: "80%",
             md: "60%",
-            lg: "44%",
+            lg: "45%",
           },
           backgroundPosition: "top",
           backgroundSize: "cover",

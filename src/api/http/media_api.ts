@@ -1,6 +1,14 @@
 import { IMedia, IMediaResponse } from "../../types/media";
-import { mediaEndpoints } from "../../utils/endpoint";
 import publicClient from "../client/public_client";
+
+const mediaEndpoints = {
+  list: (mediaType: string, mediaCategory: string, page: number) =>
+    `/${mediaType}/${mediaCategory}?page=${page}`,
+  detail: (mediaType: string, mediaId: number) =>
+    `/${mediaType}/detail/${mediaId}`,
+  search: (mediaType: string, q: string, page: number) =>
+    `/${mediaType}?query=${q}&page=${page}`,
+};
 
 const mediaApi = {
   getMediaList: (payload: IMedia) => {
@@ -26,15 +34,17 @@ const mediaApi = {
     );
   },
 
-  getMediaDetail: async (mediaType: string, mediaId: string) => {
-    try {
-      const response = await publicClient.get(
-        mediaEndpoints.detail(mediaType, mediaId)
-      );
-      return response.data;
-    } catch (error) {
-      return error;
-    }
+  getMediaDetail: (mediaType: string, mediaId: number) => {
+    // try {
+    //   const response = await publicClient.get(
+    //     mediaEndpoints.detail(mediaType, mediaId)
+    //   );
+    //   return response.data;
+    // } catch (error) {
+    //   return error;
+    // }
+
+    return publicClient.get(mediaEndpoints.detail(mediaType, mediaId));
   },
 
   searchMedia: async (mediaType: string, keyword: string, page: number) => {

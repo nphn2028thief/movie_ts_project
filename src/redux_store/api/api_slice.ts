@@ -19,42 +19,44 @@ const apiSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addMatcher(
-      (action): action is PendingAction => action.type.endsWith("/pending"),
-      (state, action) => {
-        state[action.type.split("/")?.[0]] = {
-          ...state[action.type.split("/")?.[0]],
-          [action.type.split("/")?.[1]]: {
-            status: "pending",
-            error: null,
-          },
-        };
-      }
-    );
-    builder.addMatcher(
-      (action): action is FulfilledAction => action.type.endsWith("/fulfilled"),
-      (state, action) => {
-        state[action.type.split("/")?.[0]] = {
-          ...state[action.type.split("/")?.[0]],
-          [action.type.split("/")?.[1]]: {
-            status: "fulfilled",
-            error: null,
-          },
-        };
-      }
-    );
-    builder.addMatcher(
-      (action) => action.type.endsWith("/rejected"),
-      (state, action) => {
-        state[action.type.split("/")?.[0]] = {
-          ...state[action.type.split("/")?.[0]],
-          [action.type.split("/")?.[1]]: {
-            status: "rejected",
-            error: action.payload,
-          },
-        };
-      }
-    );
+    builder
+      .addMatcher(
+        (action): action is PendingAction => action.type.endsWith("/pending"),
+        (state, action) => {
+          state[action.type.split("/")?.[0]] = {
+            ...state[action.type.split("/")?.[0]],
+            [action.type.split("/")?.[1]]: {
+              status: "pending",
+              error: null,
+            },
+          };
+        }
+      )
+      .addMatcher(
+        (action): action is FulfilledAction =>
+          action.type.endsWith("/fulfilled"),
+        (state, action) => {
+          state[action.type.split("/")?.[0]] = {
+            ...state[action.type.split("/")?.[0]],
+            [action.type.split("/")?.[1]]: {
+              status: "fulfilled",
+              error: null,
+            },
+          };
+        }
+      )
+      .addMatcher(
+        (action) => action.type.endsWith("/rejected"),
+        (state, action) => {
+          state[action.type.split("/")?.[0]] = {
+            ...state[action.type.split("/")?.[0]],
+            [action.type.split("/")?.[1]]: {
+              status: "rejected",
+              error: action.payload,
+            },
+          };
+        }
+      );
   },
 });
 

@@ -1,6 +1,9 @@
 import { IGenreList } from "../../types/media";
-import { genreEndpoints } from "../../utils/endpoint";
 import publicClient from "../client/public_client";
+
+const genreEndpoints = {
+  list: (mediaType: string) => `/genre/${mediaType}/list`,
+};
 
 const genreApi = {
   // getGenreList: async (mediaType: string) => {

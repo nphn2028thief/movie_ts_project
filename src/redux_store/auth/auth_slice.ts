@@ -20,14 +20,15 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(login.fulfilled, (state, action) => {
-      const accessToken = action.payload.accessToken;
-      localStorage.setItem("accessToken", accessToken);
-    });
-    builder.addCase(getMe.fulfilled, (state, action) => {
-      const userInfo = action.payload;
-      state.userInfo = userInfo;
-    });
+    builder
+      .addCase(login.fulfilled, (state, action) => {
+        const accessToken = action.payload.accessToken;
+        localStorage.setItem("accessToken", accessToken);
+      })
+      .addCase(getMe.fulfilled, (state, action) => {
+        const userInfo = action.payload;
+        state.userInfo = userInfo;
+      });
   },
 });
 

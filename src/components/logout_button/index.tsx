@@ -7,9 +7,9 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux_store";
 import { logout } from "../../redux_store/auth/auth_slice";
+import { resetFavorite } from "../../redux_store/favorite/favorite_slice";
 import { setIsOpen } from "../../redux_store/mobile_menu/mobile_menu_slice";
 import { ETHEME } from "../../types/theme_mode";
 
@@ -22,10 +22,16 @@ export default function LogOutButton(props: IProps) {
   const { isMobile = false, mt } = props;
 
   const { themeMode } = useAppSelector((state) => state.modeSlice);
-  const { isOpen } = useAppSelector((state) => state.modalSlice);
+  // const { isOpen } = useAppSelector((state) => state.modalSlice);
   const dispatch = useAppDispatch();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(setIsOpen(false));
+    dispatch(resetFavorite());
+  };
 
   return (
     <Stack
@@ -51,10 +57,7 @@ export default function LogOutButton(props: IProps) {
           marginY: mt ? 0 : 1,
           marginTop: mt,
         }}
-        onClick={() => {
-          dispatch(logout());
-          dispatch(setIsOpen(false));
-        }}
+        onClick={handleLogout}
       >
         <ListItemIcon sx={{ minWidth: 0, mr: 2 }}>
           <LogoutOutlined />

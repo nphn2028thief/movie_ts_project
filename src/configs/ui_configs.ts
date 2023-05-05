@@ -7,7 +7,7 @@ const uiConfigs = {
       },
       light: {
         backgroundImage:
-          "linear-gradient(to top, rgba(245, 245, 245, 0.6), rgba(0, 0, 0, 0))",
+          "linear-gradient(to top, rgba(245, 245, 245, 1), rgba(0, 0, 0, 0))",
       },
     },
     horizontalGradientBackgroundImage: {
@@ -32,7 +32,7 @@ const uiConfigs = {
     mainContent: {
       maxWidth: "1366px",
       margin: "auto",
-      padding: 2,
+      padding: 3,
     },
     backgroundImage: (imgPath: string) => {
       return {

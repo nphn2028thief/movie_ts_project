@@ -1,39 +1,35 @@
+import { IFavorite, IPayloadAddFavorite } from "../../types/favorite";
 import privateClient from "../client/private_client";
 
 const favoriteEndpoints = {
+  check: "/favorites/check",
   myFavorite: "/favorites",
   add: "/favorites",
   delete: (favoriteId: string) => `favorite/${favoriteId}`,
 };
 
 const favoriteApi = {
-  getMyFavorite: async () => {
-    try {
-      const response = await privateClient.get(favoriteEndpoints.myFavorite);
-      return response;
-    } catch (error) {
-      return error;
-    }
+  checkFavorite: (mediaId: number) => {
+    return privateClient.post<{ message: boolean }>(favoriteEndpoints.check, {
+      mediaId,
+    });
   },
 
-  addFavorite: async (mediaId: string) => {
-    try {
-      const response = await privateClient.post(favoriteEndpoints.add, mediaId);
-      return response;
-    } catch (error) {
-      return error;
-    }
+  getMyFavorite: () => {
+    return privateClient.get<IFavorite[]>(favoriteEndpoints.myFavorite);
   },
 
-  deleteFavorite: async (favoriteId: string) => {
-    try {
-      const response = await privateClient.delete(
-        favoriteEndpoints.delete(favoriteId)
-      );
-      return response;
-    } catch (error) {
-      return error;
-    }
+  addFavorite: (payload: IPayloadAddFavorite) => {
+    return privateClient.post<{ message: string; data: IFavorite }>(
+      favoriteEndpoints.add,
+      payload
+    );
+  },
+
+  deleteFavorite: (favoriteId: string) => {
+    return privateClient.delete<{ message: string; favoriteId: string }>(
+      favoriteEndpoints.delete(favoriteId)
+    );
   },
 };
 

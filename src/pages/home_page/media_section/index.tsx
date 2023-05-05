@@ -1,8 +1,11 @@
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import "swiper/css";
+import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import mediaApi from "../../../api/http/media_api";
 import CardItem from "../../../components/card_item";
+import TryAgainButton from "../../../components/try_again_button";
 import { toastMessage } from "../../../utils/toast";
 
 interface IProps {
@@ -26,7 +29,7 @@ export default function MediaSection(props: IProps) {
       .then((res) => setMediaList(res.data.results))
       .catch((error) => {
         setIsError(true);
-        toastMessage.error(error || "System is Error!");
+        toastMessage.error(error || "System is error!");
       })
       .finally(() => setIsLoading(false));
   };
@@ -57,9 +60,7 @@ export default function MediaSection(props: IProps) {
           alignItems="center"
           height={200}
         >
-          <Button sx={{ width: "fit-content" }} onClick={handleTryAgain}>
-            Try Again
-          </Button>
+          <TryAgainButton onClick={handleTryAgain} />
         </Box>
       );
     }
@@ -83,10 +84,11 @@ export default function MediaSection(props: IProps) {
         spaceBetween={12}
         grabCursor={true}
         style={{ width: "100%", height: "max-content" }}
+        speed={1000}
       >
         {mediaList.map((item) => (
           <SwiperSlide key={item.id}>
-            <CardItem data={item} mediaType={mediaType} />
+            <CardItem mediaType={mediaType} data={item} paddingTop="160%" />
           </SwiperSlide>
         ))}
       </Swiper>

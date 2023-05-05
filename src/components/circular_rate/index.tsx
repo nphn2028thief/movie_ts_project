@@ -30,7 +30,7 @@ export default function CircularRate(props: IProps) {
           alignItems: "center",
         }}
       >
-        <Typography variant="caption" fontWeight={700}>
+        <Typography variant="body2" fontWeight={700}>
           {Math.floor(value * 10) / 10}
         </Typography>
       </Box>

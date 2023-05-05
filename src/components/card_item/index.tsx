@@ -1,21 +1,19 @@
-import { Box, Button, Slide, Stack, Typography } from "@mui/material";
+import { PlayArrow } from "@mui/icons-material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import tmdbConfigs from "../../api/configs/tmdb_configs";
 import uiConfigs from "../../configs/ui_configs";
-import { useAppSelector } from "../../redux_store";
-import { PlayArrow } from "@mui/icons-material";
 import CircularRate from "../circular_rate";
 
 interface IProps {
   mediaType: string;
   data: any;
+  paddingTop: string;
 }
 
 export default function CardItem(props: IProps) {
-  const { mediaType, data } = props;
-
-  const { favoriteList } = useAppSelector((state) => state.userSlice);
+  const { mediaType, data, paddingTop } = props;
 
   const [title, setTitle] = useState<string>("");
   // data.original_title || data.title || data.name
@@ -24,14 +22,17 @@ export default function CardItem(props: IProps) {
   const [rate, setRate] = useState<number>(0);
 
   useEffect(() => {
-    setTitle(data.original_title || data.title || data.name);
+    setTitle(
+      data.original_title || data.title || data.original_name || data.name
+    );
     setPosterPath(
       tmdbConfigs.posterPath(
         data.poster_path || data.backdrop_path || data.profile_path
       )
     );
 
-    mediaType === tmdbConfigs.mediaType.movie
+    mediaType === tmdbConfigs.mediaType.movie ||
+    mediaType === tmdbConfigs.mediaType.tv
       ? setReleaseDate(data.release_date?.split("-")[0])
       : setReleaseDate(data.first_air_date?.split("-")[0]);
 
@@ -49,7 +50,7 @@ export default function CardItem(props: IProps) {
       <Box
         sx={{
           ...uiConfigs.style.backgroundImage(posterPath),
-          paddingTop: "160%",
+          paddingTop,
           "&:hover .media_info": {
             // opacity: 1,
             bottom: 0,
@@ -141,6 +142,26 @@ export default function CardItem(props: IProps) {
               </Box>
             </Stack>
           </>
+        )}
+
+        {mediaType === "people" && (
+          <Box
+            sx={{
+              position: "absolute",
+              left: 0,
+              bottom: 0,
+              right: 0,
+              display: "flex",
+              height: "fit-content",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "12px",
+            }}
+          >
+            <Typography sx={{ ...uiConfigs.style.typoLines(1) }}>
+              {title}
+            </Typography>
+          </Box>
         )}
       </Box>
     </Link>

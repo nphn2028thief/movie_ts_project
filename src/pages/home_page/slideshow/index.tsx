@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
 import { memo, useEffect, useState } from "react";
 import { Autoplay } from "swiper";
 import "swiper/css";
@@ -13,8 +7,9 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import genreApi from "../../../api/http/genre_api";
 import mediaApi from "../../../api/http/media_api";
+import TryAgainButton from "../../../components/try_again_button";
 import uiConfigs from "../../../configs/ui_configs";
-import { IGenre } from "../../../types/media";
+import { IGenre, IMediaResult } from "../../../types/media";
 import { toastMessage } from "../../../utils/toast";
 import SlideshowItem from "./slideshow_item";
 import SlideshowWrapper from "./slideshow_wrapper";
@@ -30,7 +25,7 @@ function Slideshow(props: IProps) {
   const theme = useTheme();
 
   const [genreList, setGenreList] = useState<IGenre[]>([]);
-  const [mediaList, setMediaList] = useState<any[]>([]);
+  const [mediaList, setMediaList] = useState<IMediaResult[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
@@ -75,9 +70,7 @@ function Slideshow(props: IProps) {
     if (isError) {
       return (
         <SlideshowWrapper>
-          <Button sx={{ width: "fit-content" }} onClick={handleTryAgain}>
-            Try Again
-          </Button>
+          <TryAgainButton onClick={handleTryAgain} />
         </SlideshowWrapper>
       );
     }

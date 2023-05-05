@@ -50,12 +50,24 @@ export default function HomePage() {
 
         <Box>
           {mediaSlides.map((mediaSlide) => (
-            <Container key={mediaSlide.id} title={mediaSlide.title}>
-              <MediaSection
-                mediaType={mediaSlide.type}
-                mediaCategory={mediaSlide.category}
-              />
-            </Container>
+            <Box
+              key={mediaSlide.id}
+              sx={{
+                marginTop: "5rem",
+                paddingX: {
+                  xs: 2,
+                  sm: 3,
+                },
+                color: "text.primary",
+              }}
+            >
+              <Container title={mediaSlide.title} hasButton>
+                <MediaSection
+                  mediaType={mediaSlide.type}
+                  mediaCategory={mediaSlide.category}
+                />
+              </Container>
+            </Box>
           ))}
         </Box>
       </Stack>
