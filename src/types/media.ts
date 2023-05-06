@@ -85,8 +85,22 @@ export interface ICast {
   original_name: string;
   popularity: number;
   profile_path: string;
-  cast_id: number;
+  cast_id?: number;
   character: string;
   credit_id: string;
   order: number;
+}
+
+// Get video trailer from mediaDetail.videos.results
+export interface IVideoResult {
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+  official: string;
+  published_at: string;
+  id: string;
 }

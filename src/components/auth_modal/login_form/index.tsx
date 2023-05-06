@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Stack } from "@mui/material";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useIsRequestPending } from "../../../hooks/use_status";
@@ -11,6 +11,11 @@ import { setModalIsOpen } from "../../../redux_store/modal/modal_slice";
 import { ILoginInfo } from "../../../types/auth";
 import { toastMessage } from "../../../utils/toast";
 import FormInput from "../../hook_form/form_input";
+import {
+  checkFavorite,
+  getMyFavorite,
+} from "../../../redux_store/favorite/favorite_actions";
+import { useParams } from "react-router-dom";
 
 interface IProps {
   handleSwitchModalType: () => void;
@@ -23,6 +28,12 @@ const schema = yup.object({
 
 export default function LoginForm(props: IProps) {
   const { handleSwitchModalType } = props;
+
+  const { mediaType, mediaId } = useParams();
+
+  useEffect(() => {
+    console.log(mediaType, mediaId);
+  }, [mediaType, mediaId]);
 
   const inputUsernameRef = useRef<HTMLInputElement>(null);
 
@@ -44,6 +55,7 @@ export default function LoginForm(props: IProps) {
       .then(() => {
         dispatch(setModalIsOpen(false));
         dispatch(getMe());
+        mediaId && dispatch(checkFavorite(Number(mediaId)));
         toastMessage.success("Login Successfully!");
       })
       .catch((error) => {

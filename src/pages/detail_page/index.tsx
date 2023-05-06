@@ -1,81 +1,61 @@
-import {
-  Box,
-  Button,
-  Chip,
-  CircularProgress,
-  IconButton,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import Wrapper from "../wrapper";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/pagination";
-import { useEffect, useState } from "react";
 import mediaApi from "../../api/http/media_api";
-import { useParams } from "react-router-dom";
-import { toastMessage } from "../../utils/toast";
-import favoriteApi from "../../api/http/favorite_api";
-import { useAppDispatch, useAppSelector } from "../../redux_store";
+import { useGetStatus, useIsRequestPending } from "../../hooks/use_status";
+import { useAppDispatch } from "../../redux_store";
 import {
   checkFavorite,
   deleteFavorite,
 } from "../../redux_store/favorite/favorite_actions";
-import { useGetStatus } from "../../hooks/use_status";
-import { ICast, IGenre } from "../../types/media";
-import uiConfigs from "../../configs/ui_configs";
-import tmdbConfigs from "../../api/configs/tmdb_configs";
-import CircularRate from "../../components/circular_rate";
-import { LoadingButton } from "@mui/lab";
-import { Favorite, FavoriteBorderOutlined } from "@mui/icons-material";
-import Container from "../../components/container";
-import SwiperSection from "../../components/swiper_section";
-import { Swiper, SwiperSlide } from "swiper/react";
-import CardItem from "../../components/card_item";
-import MediaSection from "../home_page/media_section";
+import { ICast, IGenre, IVideoResult } from "../../types/media";
+import { toastMessage } from "../../utils/toast";
+import Wrapper from "../wrapper";
 import BackgroundHeader from "./background_header";
+import MediaInfo from "./media_info";
+import TryAgainButton from "../../components/try_again_button";
 
 export default function DetailPage() {
   const { mediaType, mediaId } = useParams();
-
-  const theme = useTheme();
-
-  const { isFavorite } = useAppSelector((state) => state.favoriteSlice);
   const dispatch = useAppDispatch();
 
-  const [isLoading, isError] = useGetStatus("favorite", "checkFavorite");
+  const isLoading = useIsRequestPending("favorite", "checkFavorite");
 
   const [mediaDetail, setMediaDetail] = useState<any>({});
   const [genreList, setGenreList] = useState<IGenre[]>([]);
   const [castList, setCastList] = useState<ICast[]>([]);
+  const [videoResults, setVideoResults] = useState<IVideoResult[]>([]);
   const [isLoadingMediaDetail, setIsLoadingMediaDetail] =
     useState<boolean>(false);
   const [isErrorMediaDetail, setIsErrorMediaDetail] = useState<boolean>(false);
 
-  const handleTryAgain = () => {
+  const handleTryAgain = async () => {
     setIsErrorMediaDetail(false);
     setIsLoadingMediaDetail(true);
-    if (mediaType && mediaId) {
-      mediaApi
-        .getMediaDetail(mediaType, Number(mediaId))
-        .then((res) => {
-          setMediaDetail(res.data);
-          setGenreList(res.data.genres.slice(0, 3));
-          setCastList(res.data.credits.cast);
 
-          if (localStorage.getItem("accessToken")) {
-            dispatch(checkFavorite(Number(mediaId)))
-              .unwrap()
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-        })
-        .catch((error) => {
-          setIsErrorMediaDetail(true);
-          toastMessage.error(error || "System is error!");
-        })
-        .finally(() => setIsLoadingMediaDetail(false));
+    if (mediaType && mediaId) {
+      try {
+        const response = await mediaApi.getMediaDetail(
+          mediaType,
+          Number(mediaId)
+        );
+
+        setMediaDetail(response.data);
+        setGenreList(response.data.genres.slice(0, 3));
+        setCastList(response.data.credits.cast);
+        setVideoResults(response.data.videos.results);
+
+        if (localStorage.getItem("accessToken")) {
+          dispatch(checkFavorite(Number(mediaId)));
+        }
+        setIsLoadingMediaDetail(false);
+      } catch (error: any) {
+        setIsLoadingMediaDetail(false);
+        setIsErrorMediaDetail(true);
+        toastMessage.error(error || "System is error!");
+      }
     }
   };
 
@@ -83,11 +63,7 @@ export default function DetailPage() {
     handleTryAgain();
   }, [mediaType, mediaId]);
 
-  useEffect(() => {
-    console.log(mediaDetail.credits);
-  }, [mediaDetail]);
-
-  const handleDeleteFavorite = (favoriteId: string) => {
+  const handleFavorite = (favoriteId: string) => {
     dispatch(deleteFavorite(favoriteId));
   };
 
@@ -105,17 +81,17 @@ export default function DetailPage() {
       );
     }
 
-    if (isErrorMediaDetail || isError) {
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <Button sx={{ width: "fit-content" }} onClick={handleTryAgain}>
-          Try Again
-        </Button>
-      </Box>;
+    if (isErrorMediaDetail) {
+      return (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100vh"
+        >
+          <TryAgainButton onClick={handleTryAgain} />
+        </Box>
+      );
     }
 
     if (!mediaDetail) {
@@ -140,135 +116,29 @@ export default function DetailPage() {
         <Box
           sx={{
             position: "relative",
-            top: {
+            zIndex: 2,
+            marginTop: {
               xs: "-12rem",
               sm: "-18rem",
               lg: "-24rem",
             },
           }}
         >
-          <Stack
-            sx={{
-              color: "text.primary",
-              ...uiConfigs.style.mainContent,
-              zIndex: 2,
-            }}
-          >
-            <Stack direction={{ sm: "column", md: "row" }} gap={4}>
-              <Box
-                flex={{ md: "0 0 30%" }}
-                width={{ xs: "70%", sm: "50%", md: "auto" }}
-                alignSelf={{ xs: "center", md: "auto" }}
-              >
-                <Box
-                  sx={{
-                    height: {
-                      md: "100%",
-                    },
-                    paddingTop: "150%",
-                    backgroundPosition: "50%",
-                    backgroundSize: "cover",
-                    backgroundImage: `url(${tmdbConfigs.backdropPath(
-                      mediaDetail.poster_path || mediaDetail.backdrop_path
-                    )})`,
-                    borderRadius: "30px",
-                  }}
-                />
-              </Box>
-              <Stack
-                justifyContent={{ lg: "space-between" }}
-                gap={{ xs: 2, lg: "normal normal" }}
-                textAlign={{ xs: "center", md: "left" }}
-              >
-                <Box>
-                  <Typography
-                    variant="h3"
-                    fontSize={{ xs: "2.2rem", sm: "2.5rem", md: "3rem" }}
-                  >
-                    {mediaDetail.original_title || mediaDetail.title}
-                  </Typography>
-                </Box>
-
-                <Stack
-                  direction="row"
-                  gap={2}
-                  justifyContent={{ xs: "center", md: "left" }}
-                  alignItems="center"
-                >
-                  <CircularRate value={mediaDetail.vote_average} />
-
-                  {mediaDetail.genres?.slice(0, 3).map((genre: IGenre) => (
-                    <Chip
-                      key={genre.id}
-                      color="primary"
-                      label={genre && genre.name}
-                    />
-                  ))}
-                </Stack>
-
-                <Box>
-                  <Typography fontWeight={700}>
-                    {mediaDetail.overview}
-                  </Typography>
-                </Box>
-
-                <LoadingButton
-                  variant="text"
-                  sx={{
-                    width: {
-                      xs: "100%",
-                      md: "max-content",
-                    },
-                    justifyContent: {
-                      xs: "center",
-                      md: "flex-start",
-                    },
-                    paddingLeft: 0,
-                    "& .MuiButton-startIcon": {
-                      marginX: 0,
-                    },
-                  }}
-                  size="large"
-                  startIcon={
-                    isFavorite ? <Favorite /> : <FavoriteBorderOutlined />
-                  }
-                />
-
-                <Box>
-                  <Container title="Cast">
-                    <Box
-                      sx={{
-                        "& .swiper-slide": {
-                          width: {
-                            xs: "25%",
-                            lg: "20%",
-                          },
-                        },
-                      }}
-                    >
-                      <Swiper
-                        slidesPerView={"auto"}
-                        spaceBetween={12}
-                        grabCursor={true}
-                        style={{ width: "100%", height: "max-content" }}
-                        speed={1000}
-                      >
-                        {castList?.map((item) => (
-                          <SwiperSlide key={item.id}>
-                            <CardItem
-                              mediaType="people"
-                              data={item}
-                              paddingTop="120%"
-                            />
-                          </SwiperSlide>
-                        ))}
-                      </Swiper>
-                    </Box>
-                  </Container>
-                </Box>
-              </Stack>
-            </Stack>
-          </Stack>
+          <MediaInfo
+            backgroundPath={
+              mediaDetail.poster_path || mediaDetail.backdrop_path
+            }
+            title={
+              mediaDetail.original_title ||
+              mediaDetail.title ||
+              mediaDetail.original_name ||
+              mediaDetail.name
+            }
+            rate={mediaDetail.vote_average}
+            genreList={genreList}
+            overview={mediaDetail.overview}
+            castList={castList}
+          />
         </Box>
       </Box>
     );

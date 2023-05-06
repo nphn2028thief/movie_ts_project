@@ -82,16 +82,6 @@ export default function Header() {
             >
               LOG IN
             </Button>
-
-            {/* <Button
-              title="Log In"
-              width="fit-content"
-              textTransform="uppercase"
-              onClick={() => {
-                dispatch(setIsOpen(false));
-                dispatch(setModalIsOpen(true));
-              }}
-            /> */}
           </Box>
         );
       }
@@ -120,7 +110,8 @@ export default function Header() {
         <AppBar>
           <Toolbar
             sx={{
-              minHeight: { xs: "56px", md: "64px" },
+              height: { xs: "56px", md: "64px" },
+              minHeight: "0 !important",
               justifyContent: "space-between",
               alignItems: "center",
             }}

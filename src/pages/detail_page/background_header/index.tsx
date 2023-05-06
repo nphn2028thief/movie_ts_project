@@ -14,6 +14,7 @@ export default function BackgroundHeader(props: IProps) {
   return (
     <Box
       sx={{
+        zIndex: 1,
         position: "relative",
         paddingTop: {
           xs: "80%",
@@ -33,6 +34,7 @@ export default function BackgroundHeader(props: IProps) {
           height: "100%",
           pointerEvents: "none",
           ...uiConfigs.style.gradientBackgroundImage[theme.palette.mode],
+          zIndeX: -1,
         },
       }}
     />
