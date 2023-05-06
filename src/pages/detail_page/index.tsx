@@ -33,6 +33,7 @@ import SwiperSection from "../../components/swiper_section";
 import { Swiper, SwiperSlide } from "swiper/react";
 import CardItem from "../../components/card_item";
 import MediaSection from "../home_page/media_section";
+import BackgroundHeader from "./background_header";
 
 export default function DetailPage() {
   const { mediaType, mediaId } = useParams();
@@ -132,42 +133,18 @@ export default function DetailPage() {
 
     return (
       <Box>
-        <Box
-          sx={{
-            position: "relative",
-            paddingTop: {
-              xs: "60%",
-              sm: "40%",
-              md: "40%",
-            },
-            backgroundPosition: "top",
-            backgroundSize: "cover",
-            backgroundImage: `url(${tmdbConfigs.backdropPath(
-              mediaDetail.backdrop_path || mediaDetail.poster_path
-            )})`,
-            // backgroundAttachment: "fixed",
-            "&:before": {
-              content: '""',
-              position: "absolute",
-              left: 0,
-              bottom: 0,
-              width: "100%",
-              height: "100%",
-              pointerEvents: "none",
-              ...uiConfigs.style.gradientBackgroundImage[theme.palette.mode],
-            },
-          }}
+        <BackgroundHeader
+          backgroundPath={mediaDetail.backdrop_path || mediaDetail.poster_path}
         />
 
         <Box
           sx={{
             position: "relative",
-            top: "-20rem",
-            //   marginTop: {
-            //     xs: "-10rem",
-            //     md: "-15rem",
-            //     lg: "-20rem",
-            //   },
+            top: {
+              xs: "-12rem",
+              sm: "-18rem",
+              lg: "-24rem",
+            },
           }}
         >
           <Stack
@@ -177,11 +154,17 @@ export default function DetailPage() {
               zIndex: 2,
             }}
           >
-            <Stack direction="row" gap={4}>
-              <Box flex="0 0 30%">
+            <Stack direction={{ sm: "column", md: "row" }} gap={4}>
+              <Box
+                flex={{ md: "0 0 30%" }}
+                width={{ xs: "70%", sm: "50%", md: "auto" }}
+                alignSelf={{ xs: "center", md: "auto" }}
+              >
                 <Box
                   sx={{
-                    height: "100%",
+                    height: {
+                      md: "100%",
+                    },
                     paddingTop: "150%",
                     backgroundPosition: "50%",
                     backgroundSize: "cover",
@@ -192,17 +175,29 @@ export default function DetailPage() {
                   }}
                 />
               </Box>
-              <Stack justifyContent="space-between">
+              <Stack
+                justifyContent={{ lg: "space-between" }}
+                gap={{ xs: 2, lg: "normal normal" }}
+                textAlign={{ xs: "center", md: "left" }}
+              >
                 <Box>
-                  <Typography variant="h3">
+                  <Typography
+                    variant="h3"
+                    fontSize={{ xs: "2.2rem", sm: "2.5rem", md: "3rem" }}
+                  >
                     {mediaDetail.original_title || mediaDetail.title}
                   </Typography>
                 </Box>
 
-                <Stack direction="row" gap={2} alignItems="center">
+                <Stack
+                  direction="row"
+                  gap={2}
+                  justifyContent={{ xs: "center", md: "left" }}
+                  alignItems="center"
+                >
                   <CircularRate value={mediaDetail.vote_average} />
 
-                  {mediaDetail.genres?.map((genre: IGenre) => (
+                  {mediaDetail.genres?.slice(0, 3).map((genre: IGenre) => (
                     <Chip
                       key={genre.id}
                       color="primary"
@@ -220,8 +215,14 @@ export default function DetailPage() {
                 <LoadingButton
                   variant="text"
                   sx={{
-                    width: "max-content",
-                    justifyContent: "flex-start",
+                    width: {
+                      xs: "100%",
+                      md: "max-content",
+                    },
+                    justifyContent: {
+                      xs: "center",
+                      md: "flex-start",
+                    },
                     paddingLeft: 0,
                     "& .MuiButton-startIcon": {
                       marginX: 0,
@@ -239,8 +240,7 @@ export default function DetailPage() {
                       sx={{
                         "& .swiper-slide": {
                           width: {
-                            xs: "50%",
-                            md: "25%",
+                            xs: "25%",
                             lg: "20%",
                           },
                         },

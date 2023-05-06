@@ -26,14 +26,19 @@ const backdropPath = (imgEndpoint: string) =>
 const posterPath = (imgEndpoint: string) =>
   `https://image.tmdb.org/t/p/w500${imgEndpoint}`;
 
-const youtubePath = (videoId: string) => `https://2embed.org/embed/${videoId}`;
+const moviePath = (movieId: string) =>
+  `https://2embed.org/embed/movie?tmdb=${movieId}`;
+
+const tvPath = (tvId: string, season: number, episode: number) =>
+  `https://2embed.org/embed/series?tmdb=${tvId}&s=${season}&e=${episode}`;
 
 const tmdbConfigs = {
   mediaType,
   mediaCategory,
   backdropPath,
   posterPath,
-  youtubePath,
+  moviePath,
+  tvPath,
 };
 
 export default tmdbConfigs;
