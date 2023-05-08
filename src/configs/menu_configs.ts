@@ -19,6 +19,7 @@ const FavoritePage = React.lazy(() => import("../pages/favorite_page"));
 const ReviewPage = React.lazy(() => import("../pages/review_page"));
 const ProfilePage = React.lazy(() => import("../pages/profile_page"));
 const NotFoundPage = React.lazy(() => import("../pages/not_found_page"));
+const TestPage = React.lazy(() => import("../pages/test_page"));
 
 const menuConfigs: IMenuConfig = {
   main: [
@@ -147,6 +148,13 @@ const menuConfigs: IMenuConfig = {
       name: "Not found",
       path: CPath.notFound,
       page: NotFoundPage,
+      state: "",
+    },
+    {
+      id: 12,
+      name: "Test",
+      path: "/test",
+      page: TestPage,
       state: "",
     },
   ],

@@ -29,11 +29,11 @@ const posterPath = (imgEndpoint: string) =>
 const youtubePath = (mediaIdOrKey: string) =>
   `https://2embed.org/embed/${mediaIdOrKey}`;
 
-const moviePath = (movieId: string) =>
-  `https://2embed.org/embed/movie?tmdb=${movieId}`;
+const moviePath = (movieId: number) =>
+  `https://www.2embed.to/embed/tmdb/movie?id=${movieId}`;
 
-const tvPath = (tvId: string, season?: number, episode?: number) =>
-  `https://2embed.org/embed/series?tmdb=${tvId}&s=${season}&e=${episode}`;
+const tvPath = (tvId: number, season: number, episode: number) =>
+  `https://www.2embed.to/embed/tmdb/tv?id=${tvId}&s=${season}&e=${episode}`;
 
 const tmdbConfigs = {
   mediaType,

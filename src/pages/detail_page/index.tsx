@@ -1,21 +1,22 @@
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/pagination";
 import mediaApi from "../../api/http/media_api";
-import { useGetStatus, useIsRequestPending } from "../../hooks/use_status";
+import TryAgainButton from "../../components/try_again_button";
+import { useIsRequestPending } from "../../hooks/use_status";
 import { useAppDispatch } from "../../redux_store";
 import {
   checkFavorite,
   deleteFavorite,
 } from "../../redux_store/favorite/favorite_actions";
-import { ICast, IGenre, IVideoResult } from "../../types/media";
+import { ICast, IGenre, ISeason, IVideoResult } from "../../types/media";
 import { toastMessage } from "../../utils/toast";
 import Wrapper from "../wrapper";
 import BackgroundHeader from "./background_header";
+import MediaIframe from "./media_iframe";
 import MediaInfo from "./media_info";
-import TryAgainButton from "../../components/try_again_button";
 
 export default function DetailPage() {
   const { mediaType, mediaId } = useParams();
@@ -27,35 +28,40 @@ export default function DetailPage() {
   const [genreList, setGenreList] = useState<IGenre[]>([]);
   const [castList, setCastList] = useState<ICast[]>([]);
   const [videoResults, setVideoResults] = useState<IVideoResult[]>([]);
+  const [seasons, setSeasons] = useState<ISeason[]>([]);
   const [isLoadingMediaDetail, setIsLoadingMediaDetail] =
     useState<boolean>(false);
   const [isErrorMediaDetail, setIsErrorMediaDetail] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!mediaType || !mediaId) return;
+  }, [mediaType, mediaId]);
 
   const handleTryAgain = async () => {
     setIsErrorMediaDetail(false);
     setIsLoadingMediaDetail(true);
 
-    if (mediaType && mediaId) {
-      try {
-        const response = await mediaApi.getMediaDetail(
-          mediaType,
-          Number(mediaId)
-        );
+    try {
+      const response = await mediaApi.getMediaDetail(
+        String(mediaType),
+        Number(mediaId)
+      );
 
-        setMediaDetail(response.data);
-        setGenreList(response.data.genres.slice(0, 3));
-        setCastList(response.data.credits.cast);
-        setVideoResults(response.data.videos.results);
+      setMediaDetail(response.data);
+      setGenreList(response.data.genres.slice(0, 3));
+      setCastList(response.data.credits.cast);
+      setVideoResults(response.data.videos.results);
 
-        if (localStorage.getItem("accessToken")) {
-          dispatch(checkFavorite(Number(mediaId)));
-        }
-        setIsLoadingMediaDetail(false);
-      } catch (error: any) {
-        setIsLoadingMediaDetail(false);
-        setIsErrorMediaDetail(true);
-        toastMessage.error(error || "System is error!");
+      response.data.seasons && setSeasons(response.data.seasons);
+
+      if (localStorage.getItem("accessToken")) {
+        dispatch(checkFavorite(Number(mediaId)));
       }
+      setIsLoadingMediaDetail(false);
+    } catch (error: any) {
+      setIsLoadingMediaDetail(false);
+      setIsErrorMediaDetail(true);
+      toastMessage.error(error || "System is error!");
     }
   };
 
@@ -113,7 +119,7 @@ export default function DetailPage() {
           backgroundPath={mediaDetail.backdrop_path || mediaDetail.poster_path}
         />
 
-        <Box
+        <Stack
           sx={{
             position: "relative",
             zIndex: 2,
@@ -122,8 +128,10 @@ export default function DetailPage() {
               sm: "-18rem",
               lg: "-24rem",
             },
+            gap: "3rem",
           }}
         >
+          {/* Media Detail Info */}
           <MediaInfo
             backgroundPath={
               mediaDetail.poster_path || mediaDetail.backdrop_path
@@ -139,7 +147,16 @@ export default function DetailPage() {
             overview={mediaDetail.overview}
             castList={castList}
           />
-        </Box>
+
+          {/* Media Detail Videos */}
+          <MediaIframe
+            mediaType={String(mediaType)}
+            mediaId={Number(mediaId)}
+            numberOfSeason={
+              mediaDetail.number_of_seasons && mediaDetail.number_of_seasons
+            }
+          />
+        </Stack>
       </Box>
     );
   };
