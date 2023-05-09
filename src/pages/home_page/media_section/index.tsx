@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Skeleton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -20,6 +20,14 @@ export default function MediaSection(props: IProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
+  useEffect(() => {
+    return () => {
+      setMediaList([]);
+      setIsLoading(false);
+      setIsError(false);
+    };
+  }, []);
+
   const handleTryAgain = () => {
     setIsError(false);
     setIsLoading(true);
@@ -40,16 +48,16 @@ export default function MediaSection(props: IProps) {
 
   const handleShowMediaSlide = () => {
     if (isLoading) {
-      return (
-        <Box
-          display="flex"
-          height={{ xs: 300, sm: 400 }}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <CircularProgress size={28} thickness={6} color="error" />
-        </Box>
-      );
+      return Array.from({ length: 7 }, (_, index) => {
+        return (
+          <SwiperSlide key={index}>
+            <Skeleton
+              variant="rectangular"
+              sx={{ height: { xs: 300, sm: 400 } }}
+            />
+          </SwiperSlide>
+        );
+      });
     }
 
     if (isError) {
@@ -78,21 +86,11 @@ export default function MediaSection(props: IProps) {
       );
     }
 
-    return (
-      <Swiper
-        slidesPerView={"auto"}
-        spaceBetween={12}
-        grabCursor={true}
-        style={{ width: "100%", height: "max-content" }}
-        speed={1000}
-      >
-        {mediaList.map((item) => (
-          <SwiperSlide key={item.id}>
-            <CardItem mediaType={mediaType} data={item} paddingTop="160%" />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    );
+    return mediaList.map((item) => (
+      <SwiperSlide key={item.id}>
+        <CardItem mediaType={mediaType} data={item} paddingTop="160%" />
+      </SwiperSlide>
+    ));
   };
 
   return (
@@ -108,7 +106,15 @@ export default function MediaSection(props: IProps) {
         },
       }}
     >
-      {handleShowMediaSlide()}
+      <Swiper
+        slidesPerView={"auto"}
+        spaceBetween={12}
+        grabCursor={true}
+        style={{ width: "100%", height: "max-content" }}
+        speed={1000}
+      >
+        {handleShowMediaSlide()}
+      </Swiper>
     </Box>
   );
 }

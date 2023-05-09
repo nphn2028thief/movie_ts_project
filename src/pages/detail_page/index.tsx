@@ -37,6 +37,18 @@ export default function DetailPage() {
     if (!mediaType || !mediaId) return;
   }, [mediaType, mediaId]);
 
+  useEffect(() => {
+    return () => {
+      setMediaDetail([]);
+      setGenreList([]);
+      setCastList([]);
+      setVideoResults([]);
+      setSeasons([]);
+      setIsLoadingMediaDetail(false);
+      setIsErrorMediaDetail(false);
+    };
+  }, []);
+
   const handleTryAgain = async () => {
     setIsErrorMediaDetail(false);
     setIsLoadingMediaDetail(true);
@@ -69,9 +81,9 @@ export default function DetailPage() {
     handleTryAgain();
   }, [mediaType, mediaId]);
 
-  const handleFavorite = (favoriteId: string) => {
-    dispatch(deleteFavorite(favoriteId));
-  };
+  // const handleFavorite = (favoriteId: string) => {
+  //   dispatch(deleteFavorite(favoriteId));
+  // };
 
   const handleRenderMediaDetail = () => {
     if (isLoadingMediaDetail || isLoading) {

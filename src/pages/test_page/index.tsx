@@ -1,17 +1,13 @@
-import React from "react";
+import { Box, Button, Skeleton, Stack, Typography } from "@mui/material";
 import Wrapper from "../wrapper";
-import { Stack, Button } from "@mui/material";
+
+import "swiper/css";
+import "swiper/css/pagination";
 
 export default function TestPage() {
-  //   const handleRenderButton = () => {
-  //     Array.from({ length: 10 }, (_, index) => {
-  //       <Button variant="outlined">{index}</Button>;
-  //     });
-  //   };
-
   return (
     <Wrapper>
-      <Stack direction="row" flexWrap="wrap" gap={2}>
+      {/* <Stack direction="row" gap={2}>
         {Array.from({ length: 200 }, (_, index) => {
           return (
             <Button
@@ -26,6 +22,11 @@ export default function TestPage() {
             </Button>
           );
         })}
+      </Stack> */}
+      <Stack gap={3}>
+        <Skeleton variant="rectangular" width="100%" height={500} />
+        <Skeleton variant="text" width="60%" height={40} />
+        <Skeleton variant="text" width="60%" height={40} />
       </Stack>
     </Wrapper>
   );

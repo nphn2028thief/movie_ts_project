@@ -29,6 +29,15 @@ function Slideshow(props: IProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
+  useEffect(() => {
+    return () => {
+      setGenreList([]);
+      setMediaList([]);
+      setIsLoading(false);
+      setIsError(false);
+    };
+  }, []);
+
   const handleTryAgain = async () => {
     setIsError(false);
     setIsLoading(true);
