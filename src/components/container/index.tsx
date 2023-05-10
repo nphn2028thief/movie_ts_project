@@ -11,16 +11,6 @@ export default function Container(props: IProps) {
   const { title, hasButton = false, children } = props;
 
   return (
-    // <Box
-    // sx={{
-    //   marginTop: "5rem",
-    //   paddingX: {
-    //     xs: 2,
-    //     sm: 3,
-    //   },
-    //   color: "text.primary",
-    // }}
-    // >
     <Stack spacing={4} color="text.primary">
       <Stack
         direction="row"
@@ -63,6 +53,5 @@ export default function Container(props: IProps) {
       </Stack>
       {children}
     </Stack>
-    // </Box>
   );
 }

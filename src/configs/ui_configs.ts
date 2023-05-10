@@ -32,7 +32,10 @@ const uiConfigs = {
     mainContent: {
       maxWidth: "1366px",
       margin: "auto",
-      padding: 3,
+      padding: {
+        xs: 2,
+        sm: 3,
+      },
     },
     backgroundImage: (imgPath: string) => {
       return {

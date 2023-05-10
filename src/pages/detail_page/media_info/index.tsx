@@ -147,7 +147,7 @@ export default function MediaInfo(props: IProps) {
             >
               {rate && <CircularRate value={rate} />}
 
-              {genreList?.map((genre: IGenre) => (
+              {genreList?.slice(0, 3).map((genre: IGenre) => (
                 <Chip
                   key={genre.id}
                   color="primary"

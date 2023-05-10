@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-import mediaApi from "../../../api/http/media_api";
-import CardItem from "../../../components/card_item";
-import TryAgainButton from "../../../components/try_again_button";
-import { toastMessage } from "../../../utils/toast";
+import mediaApi from "../../api/http/media_api";
+import CardItem from "../../components/card_item";
+import TryAgainButton from "../../components/try_again_button";
+import { toastMessage } from "../../utils/toast";
 
 interface IProps {
   mediaType: string;

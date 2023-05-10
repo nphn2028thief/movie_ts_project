@@ -2,6 +2,9 @@ import { Box } from "@mui/material";
 import { ReactNode } from "react";
 import { Navigation, Pagination } from "swiper";
 import { Swiper } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 interface IProps {
   children: ReactNode;
@@ -24,6 +27,7 @@ const NavigationSwiper = (props: IProps) => {
         },
         "& .swiper-button-next, & .swiper-button-prev": {
           color: "text.primary",
+          padding: "24px",
           "&::after": {
             fontSize: { xs: "1rem", md: "2rem" },
           },

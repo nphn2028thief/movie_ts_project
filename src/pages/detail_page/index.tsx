@@ -1,37 +1,38 @@
 import { Box, CircularProgress, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/pagination";
-import mediaApi from "../../api/http/media_api";
+import tmdbConfigs from "../../api/configs/tmdb_configs";
+import Container from "../../components/container";
+import MediaSection from "../../components/media_section";
 import TryAgainButton from "../../components/try_again_button";
-import { useIsRequestPending } from "../../hooks/use_status";
-import { useAppDispatch } from "../../redux_store";
-import {
-  checkFavorite,
-  deleteFavorite,
-} from "../../redux_store/favorite/favorite_actions";
-import { ICast, IGenre, ISeason, IVideoResult } from "../../types/media";
+import uiConfigs from "../../configs/ui_configs";
+import { useGetStatus, useIsRequestPending } from "../../hooks/use_status";
+import { useAppDispatch, useAppSelector } from "../../redux_store";
+import { checkFavorite } from "../../redux_store/favorite/favorite_actions";
+import { getMediaDetail } from "../../redux_store/media/media_actions";
+import { resetMediaDetail } from "../../redux_store/media/media_slice";
 import { toastMessage } from "../../utils/toast";
 import Wrapper from "../wrapper";
+import BackdropSlide from "./backdrop_slide";
 import BackgroundHeader from "./background_header";
 import MediaIframe from "./media_iframe";
 import MediaInfo from "./media_info";
+import Review from "./review";
 
 export default function DetailPage() {
   const { mediaType, mediaId } = useParams();
+
+  const { mediaDetail, genreList, castList, backdropList, numberOfSeason } =
+    useAppSelector((state) => state.mediaSlice);
   const dispatch = useAppDispatch();
 
-  const isLoading = useIsRequestPending("favorite", "checkFavorite");
-
-  const [mediaDetail, setMediaDetail] = useState<any>({});
-  const [genreList, setGenreList] = useState<IGenre[]>([]);
-  const [castList, setCastList] = useState<ICast[]>([]);
-  const [videoResults, setVideoResults] = useState<IVideoResult[]>([]);
-  const [seasons, setSeasons] = useState<ISeason[]>([]);
-  const [isLoadingMediaDetail, setIsLoadingMediaDetail] =
-    useState<boolean>(false);
-  const [isErrorMediaDetail, setIsErrorMediaDetail] = useState<boolean>(false);
+  const isLoadingCheckFavorite = useIsRequestPending(
+    "favorite",
+    "checkFavorite"
+  );
+  const [isLoading, isError] = useGetStatus("media", "getMediaDetail");
 
   useEffect(() => {
     if (!mediaType || !mediaId) return;
@@ -39,54 +40,31 @@ export default function DetailPage() {
 
   useEffect(() => {
     return () => {
-      setMediaDetail([]);
-      setGenreList([]);
-      setCastList([]);
-      setVideoResults([]);
-      setSeasons([]);
-      setIsLoadingMediaDetail(false);
-      setIsErrorMediaDetail(false);
+      dispatch(resetMediaDetail());
     };
   }, []);
 
   const handleTryAgain = async () => {
-    setIsErrorMediaDetail(false);
-    setIsLoadingMediaDetail(true);
-
-    try {
-      const response = await mediaApi.getMediaDetail(
-        String(mediaType),
-        Number(mediaId)
-      );
-
-      setMediaDetail(response.data);
-      setGenreList(response.data.genres.slice(0, 3));
-      setCastList(response.data.credits.cast);
-      setVideoResults(response.data.videos.results);
-
-      response.data.seasons && setSeasons(response.data.seasons);
-
-      if (localStorage.getItem("accessToken")) {
-        dispatch(checkFavorite(Number(mediaId)));
-      }
-      setIsLoadingMediaDetail(false);
-    } catch (error: any) {
-      setIsLoadingMediaDetail(false);
-      setIsErrorMediaDetail(true);
-      toastMessage.error(error || "System is error!");
-    }
+    dispatch(
+      getMediaDetail({ mediaType: String(mediaType), mediaId: Number(mediaId) })
+    )
+      .unwrap()
+      .then(() => {
+        if (localStorage.getItem("accessToken")) {
+          dispatch(checkFavorite(Number(mediaId)));
+        }
+      })
+      .catch((error) => {
+        toastMessage.error(error.message || "System is error!");
+      });
   };
 
   useEffect(() => {
     handleTryAgain();
   }, [mediaType, mediaId]);
 
-  // const handleFavorite = (favoriteId: string) => {
-  //   dispatch(deleteFavorite(favoriteId));
-  // };
-
   const handleRenderMediaDetail = () => {
-    if (isLoadingMediaDetail || isLoading) {
+    if (isLoadingCheckFavorite || isLoading) {
       return (
         <Box
           display="flex"
@@ -99,7 +77,7 @@ export default function DetailPage() {
       );
     }
 
-    if (isErrorMediaDetail) {
+    if (isError) {
       return (
         <Box
           display="flex"
@@ -164,10 +142,27 @@ export default function DetailPage() {
           <MediaIframe
             mediaType={String(mediaType)}
             mediaId={Number(mediaId)}
-            numberOfSeason={
-              mediaDetail.number_of_seasons && mediaDetail.number_of_seasons
-            }
+            numberOfSeason={numberOfSeason}
           />
+
+          {/* Backdrops */}
+          <Box sx={{ ...uiConfigs.style.mainContent, margin: "0 !important" }}>
+            <Container title="backdrops">
+              <BackdropSlide backdrops={backdropList} />
+            </Container>
+          </Box>
+
+          <Review />
+
+          {/* Recommend */}
+          <Box sx={{ ...uiConfigs.style.mainContent, margin: "0 !important" }}>
+            <Container title="You may also like" hasButton>
+              <MediaSection
+                mediaType={String(mediaType)}
+                mediaCategory={tmdbConfigs.mediaCategory.top_rated}
+              />
+            </Container>
+          </Box>
         </Stack>
       </Box>
     );

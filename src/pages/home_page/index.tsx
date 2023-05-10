@@ -1,8 +1,8 @@
 import { Box, Stack } from "@mui/material";
 import tmdbConfigs from "../../api/configs/tmdb_configs";
 import Container from "../../components/container";
+import MediaSection from "../../components/media_section";
 import Wrapper from "../wrapper";
-import MediaSection from "./media_section";
 import Slideshow from "./slideshow";
 
 interface IMediaSlide {

@@ -21,3 +21,8 @@ html *::-webkit-scrollbar-track {
 body {
   overflow-y: overlay;
 }
+
+a {
+  text-decoration: none;
+  color: unset;
+}
