@@ -46,7 +46,7 @@ export default function DetailPage() {
 
   const handleTryAgain = async () => {
     dispatch(
-      getMediaDetail({ mediaType: String(mediaType), mediaId: Number(mediaId) })
+      getMediaDetail({ mediaType: String(mediaType), mediaId: String(mediaId) })
     )
       .unwrap()
       .then(() => {
@@ -152,7 +152,7 @@ export default function DetailPage() {
             </Container>
           </Box>
 
-          <Review />
+          <Review mediaType={String(mediaType)} mediaId={String(mediaId)} />
 
           {/* Recommend */}
           <Box sx={{ ...uiConfigs.style.mainContent, margin: "0 !important" }}>

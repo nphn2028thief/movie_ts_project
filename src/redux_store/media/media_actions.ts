@@ -1,14 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import mediaApi from "../../api/http/media_api";
-
-interface IPayload {
-  mediaType: string;
-  mediaId: number;
-}
+import { IMediaPayload } from "../../types/media";
 
 export const getMediaDetail = createAsyncThunk(
   "media/getMediaDetail",
-  async (payload: IPayload, { rejectWithValue }) => {
+  async (payload: IMediaPayload, { rejectWithValue }) => {
     try {
       const response = await mediaApi.getMediaDetail(
         payload.mediaType,

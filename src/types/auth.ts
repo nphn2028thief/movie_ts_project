@@ -22,11 +22,13 @@ export interface IRegisterInfo {
 }
 
 export interface IUser {
-  id: string;
+  _id: string;
   password: string;
   firstName: string;
   lastName: string;
   image: string | undefined;
+  createAt: Date;
+  updateAt: Date;
 }
 
 export interface IUpdateAccountInfo

@@ -6,7 +6,6 @@ import {
   deleteFavorite,
   getMyFavorite,
 } from "./favorite_actions";
-import { build } from "joi";
 
 interface IState {
   favoriteList: IFavorite[];

@@ -8,7 +8,7 @@ export const checkFavorite = createAsyncThunk(
     try {
       const response = await favoriteApi.checkFavorite(mediaId);
       return response.data.message;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error);
     }
   }
@@ -20,7 +20,7 @@ export const getMyFavorite = createAsyncThunk(
     try {
       const response = await favoriteApi.getMyFavorite();
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error);
     }
   }
@@ -32,7 +32,7 @@ export const addFavorite = createAsyncThunk(
     try {
       const response = await favoriteApi.addFavorite(payload);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error);
     }
   }
@@ -44,7 +44,7 @@ export const deleteFavorite = createAsyncThunk(
     try {
       const response = await favoriteApi.deleteFavorite(favoriteId);
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error);
     }
   }

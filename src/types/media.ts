@@ -124,3 +124,8 @@ export interface IBackdrop {
   vote_count: number;
   width: number;
 }
+
+export interface IMediaPayload {
+  mediaType: string;
+  mediaId: string;
+}

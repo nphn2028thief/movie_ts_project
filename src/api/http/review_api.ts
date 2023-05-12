@@ -1,44 +1,37 @@
-import { IReviewInput } from "../../types/review";
+import { IPayloadAddReview, IReview } from "../../types/review";
 import privateClient from "../client/private_client";
 import publicClient from "../client/public_client";
 
 const reviewEndpoints = {
   list: "/reviews",
-  add: (mediaId: string) => `/reviews/${mediaId}`,
+  listByMedia: (mediaType: string, mediaId: string) =>
+    `/reviews/${mediaType}/${mediaId}`,
+  add: "/reviews",
   delete: (reviewId: string) => `/reviews/${reviewId}`,
 };
 
 const reviewApi = {
-  getReviews: async () => {
-    try {
-      const response = await publicClient.get(reviewEndpoints.list);
-      return response;
-    } catch (error) {
-      return error;
-    }
+  getReviews: () => {
+    return privateClient.get<IReview[]>(reviewEndpoints.list);
   },
 
-  addReview: async (reviewInput: IReviewInput) => {
-    try {
-      const response = await privateClient.post(
-        reviewEndpoints.add(reviewInput.mediaId),
-        reviewInput
-      );
-      return response;
-    } catch (error) {
-      return error;
-    }
+  getReviewsByMedia: (mediaType: string, mediaId: string) => {
+    return publicClient.get<IReview[]>(
+      reviewEndpoints.listByMedia(mediaType, mediaId)
+    );
   },
 
-  deleteReview: async (reviewId: string) => {
-    try {
-      const response = await privateClient.delete(
-        reviewEndpoints.delete(reviewId)
-      );
-      return response;
-    } catch (error) {
-      return error;
-    }
+  addReview: (payload: IPayloadAddReview) => {
+    return privateClient.post<{ message: string; data: IReview }>(
+      reviewEndpoints.add,
+      payload
+    );
+  },
+
+  deleteReview: (reviewId: string) => {
+    return privateClient.delete<{ message: string; reviewId: string }>(
+      reviewEndpoints.delete(reviewId)
+    );
   },
 };
 

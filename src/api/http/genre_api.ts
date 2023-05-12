@@ -6,17 +6,6 @@ const genreEndpoints = {
 };
 
 const genreApi = {
-  // getGenreList: async (mediaType: string) => {
-  //   try {
-  //     const response = await publicClient.get<IGenreList>(
-  //       genreEndpoints.list(mediaType)
-  //     );
-
-  //     return response.data.genres;
-  //   } catch (error: any) {
-  //     return error;
-  //   }
-  // },
   getGenreList: (mediaType: string) => {
     return publicClient.get<IGenreList>(genreEndpoints.list(mediaType));
   },

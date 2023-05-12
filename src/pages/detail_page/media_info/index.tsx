@@ -102,7 +102,7 @@ export default function MediaInfo(props: IProps) {
       }}
     >
       <Stack direction={{ sm: "column", md: "row" }} gap={4}>
-        <Zoom in timeout={1000}>
+        <Zoom in timeout={400}>
           <Box
             flex={{ md: "0 0 30%" }}
             width={{ xs: "70%", sm: "50%", md: "auto" }}
@@ -124,7 +124,7 @@ export default function MediaInfo(props: IProps) {
             />
           </Box>
         </Zoom>
-        <Grow in style={{ transformOrigin: "0 0 0" }} timeout={1500}>
+        <Grow in style={{ transformOrigin: "0 0 0" }} timeout={800}>
           <Stack
             justifyContent={{ lg: "space-between" }}
             gap={{ xs: 2, lg: "normal normal" }}

@@ -4,7 +4,7 @@ import publicClient from "../client/public_client";
 const mediaEndpoints = {
   list: (mediaType: string, mediaCategory: string, page: number) =>
     `/${mediaType}/${mediaCategory}?page=${page}`,
-  detail: (mediaType: string, mediaId: number) =>
+  detail: (mediaType: string, mediaId: string) =>
     `/${mediaType}/detail/${mediaId}`,
   episode: (tvId: number, seasonNumber: number) =>
     `/tv/${tvId}/season/${seasonNumber}`,
@@ -23,7 +23,7 @@ const mediaApi = {
     );
   },
 
-  getMediaDetail: (mediaType: string, mediaId: number) => {
+  getMediaDetail: (mediaType: string, mediaId: string) => {
     return publicClient.get(mediaEndpoints.detail(mediaType, mediaId));
   },
 
