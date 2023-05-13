@@ -7,7 +7,7 @@ export const checkFavorite = createAsyncThunk(
   async (mediaId: number, { rejectWithValue }) => {
     try {
       const response = await favoriteApi.checkFavorite(mediaId);
-      return response.data.message;
+      return response.data;
     } catch (error: any) {
       return rejectWithValue(error);
     }

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUser } from "../../types/auth";
-import { getMe, login, register } from "./auth_actions";
+import { getMe, login } from "./auth_actions";
 
 interface IState {
   userInfo: IUser | null;

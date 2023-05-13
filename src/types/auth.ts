@@ -27,6 +27,8 @@ export interface IUser {
   firstName: string;
   lastName: string;
   image: string | undefined;
+  favorites: number[];
+  reviews: string[];
   createAt: Date;
   updateAt: Date;
 }

@@ -2,7 +2,7 @@ import { IUser } from "./auth";
 
 export interface IPayloadAddReview {
   mediaType: string;
-  mediaId: string;
+  mediaId: number;
   mediaTitle: string;
   mediaPoster: string;
   content: string;

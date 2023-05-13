@@ -26,9 +26,6 @@ const backdropPath = (imgEndpoint: string) =>
 const posterPath = (imgEndpoint: string) =>
   `https://image.tmdb.org/t/p/w500${imgEndpoint}`;
 
-const youtubePath = (mediaIdOrKey: string) =>
-  `https://2embed.org/embed/${mediaIdOrKey}`;
-
 const moviePath = (movieId: number) =>
   `https://www.2embed.to/embed/tmdb/movie?id=${movieId}`;
 
@@ -40,7 +37,6 @@ const tmdbConfigs = {
   mediaCategory,
   backdropPath,
   posterPath,
-  youtubePath,
   moviePath,
   tvPath,
 };

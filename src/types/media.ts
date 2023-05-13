@@ -127,5 +127,5 @@ export interface IBackdrop {
 
 export interface IMediaPayload {
   mediaType: string;
-  mediaId: string;
+  mediaId: number;
 }

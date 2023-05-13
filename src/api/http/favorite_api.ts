@@ -5,14 +5,17 @@ const favoriteEndpoints = {
   check: "/favorites/check",
   myFavorite: "/favorites",
   add: "/favorites",
-  delete: (favoriteId: string) => `favorite/${favoriteId}`,
+  delete: (favoriteId: string) => `favorites/${favoriteId}`,
 };
 
 const favoriteApi = {
   checkFavorite: (mediaId: number) => {
-    return privateClient.post<{ message: boolean }>(favoriteEndpoints.check, {
-      mediaId,
-    });
+    return privateClient.post<{ message: boolean; favoriteId?: string }>(
+      favoriteEndpoints.check,
+      {
+        mediaId,
+      }
+    );
   },
 
   getMyFavorite: () => {

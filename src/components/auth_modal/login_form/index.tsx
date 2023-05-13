@@ -31,10 +31,6 @@ export default function LoginForm(props: IProps) {
 
   const { mediaType, mediaId } = useParams();
 
-  useEffect(() => {
-    console.log(mediaType, mediaId);
-  }, [mediaType, mediaId]);
-
   const inputUsernameRef = useRef<HTMLInputElement>(null);
 
   const isLoadingLogin = useIsRequestPending("auth", "login");

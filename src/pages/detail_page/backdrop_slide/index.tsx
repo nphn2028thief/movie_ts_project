@@ -1,19 +1,15 @@
 import { Box } from "@mui/material";
 import { SwiperSlide } from "swiper/react";
 import tmdbConfigs from "../../../api/configs/tmdb_configs";
-import { IBackdrop } from "../../../types/media";
+import { useAppSelector } from "../../../redux_store";
 import NavigationSwiper from "./navigation_swiper";
 
-interface IProps {
-  backdrops: IBackdrop[];
-}
-
-export default function BackdropSlide(props: IProps) {
-  const { backdrops } = props;
+export default function BackdropSlide() {
+  const { backdropList } = useAppSelector((state) => state.mediaSlice);
 
   return (
     <NavigationSwiper>
-      {backdrops.slice(0, 10).map((backdrop, index) => (
+      {backdropList.slice(0, 10).map((backdrop, index) => (
         <SwiperSlide key={index}>
           <Box
             sx={{

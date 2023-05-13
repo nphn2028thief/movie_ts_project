@@ -1,57 +1,84 @@
-import { Box, Chip, Grow, Stack, Typography, Zoom } from "@mui/material";
-import React from "react";
-import uiConfigs from "../../../configs/ui_configs";
-import tmdbConfigs from "../../../api/configs/tmdb_configs";
-import CircularRate from "../../../components/circular_rate";
-import { LoadingButton } from "@mui/lab";
 import { Favorite, FavoriteBorderOutlined } from "@mui/icons-material";
-import Container from "../../../components/container";
-import { IGenre } from "../../../types/media";
-import { useAppDispatch, useAppSelector } from "../../../redux_store";
-import { ICast } from "../../../types/media";
+import { LoadingButton } from "@mui/lab";
+import { Box, Chip, Grow, Stack, Typography, Zoom } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
+import tmdbConfigs from "../../../api/configs/tmdb_configs";
 import CardItem from "../../../components/card_item";
+import CircularRate from "../../../components/circular_rate";
+import Container from "../../../components/container";
+import uiConfigs from "../../../configs/ui_configs";
+import { useIsRequestPending } from "../../../hooks/use_status";
+import { useAppDispatch, useAppSelector } from "../../../redux_store";
 import {
   addFavorite,
+  checkFavorite,
   deleteFavorite,
 } from "../../../redux_store/favorite/favorite_actions";
 import { setModalIsOpen } from "../../../redux_store/modal/modal_slice";
-import {
-  useIsRequestError,
-  useIsRequestPending,
-} from "../../../hooks/use_status";
+import { IGenre } from "../../../types/media";
+import { toastMessage } from "../../../utils/toast";
 
 interface IProps {
-  backgroundPath: string;
-  title: string;
-  rate?: number;
-  genreList?: IGenre[];
-  overview: string;
-  castList?: ICast[];
+  mediaType: string;
+  mediaId: number;
 }
 
 export default function MediaInfo(props: IProps) {
-  const { backgroundPath, title, rate, genreList, overview, castList } = props;
+  const { mediaType, mediaId } = props;
 
   const { userInfo } = useAppSelector((state) => state.authSlice);
-  const { isFavorite } = useAppSelector((state) => state.favoriteSlice);
+  const { mediaDetail, genreList, castList } = useAppSelector(
+    (state) => state.mediaSlice
+  );
+  const { isFavorite, favoriteId } = useAppSelector(
+    (state) => state.favoriteSlice
+  );
   const dispatch = useAppDispatch();
 
   const isLoadingAddFavorite = useIsRequestPending("favorite", "addFavorite");
   const isLoadingDeleteFavorite = useIsRequestPending(
     "favorite",
-    "addFavorite"
+    "deleteFavorite"
   );
-  const isErrorAddFavorite = useIsRequestError("favorite", "deleteFavorite");
-  const isErrorDeleteFavorite = useIsRequestError("favorite", "deleteFavorite");
+  const isLoadingCheckFavorite = useIsRequestPending(
+    "favorite",
+    "checkFavorite"
+  );
 
-  const handleFavorite = (favoriteId: string) => {
+  const handleFavorite = (favoriteId?: string) => {
     if (userInfo) {
-      if (isFavorite) {
+      if (!isFavorite && favoriteId === undefined) {
         // Do Something ...
-        // dispatch(addFavorite())
-      } else {
-        dispatch(deleteFavorite(favoriteId));
+        dispatch(
+          addFavorite({
+            mediaType,
+            mediaId,
+            mediaTitle:
+              mediaDetail.original_title ||
+              mediaDetail.title ||
+              mediaDetail.original_name ||
+              mediaDetail.name,
+            mediaPoster: mediaDetail.poster_path || mediaDetail.backdrop_path,
+            mediaRate: mediaDetail.vote_average,
+          })
+        )
+          .unwrap()
+          .then((res) =>
+            toastMessage.success(
+              res.message || "Add to favorite list successfully"
+            )
+          )
+          .catch((error) =>
+            toastMessage.error(error.message || "System is error!")
+          );
+      } else if (isFavorite) {
+        favoriteId &&
+          dispatch(deleteFavorite(favoriteId))
+            .unwrap()
+            .then(() => dispatch(checkFavorite(mediaId)))
+            .catch((error) =>
+              toastMessage.error(error.message || "System is error!")
+            );
       }
     } else {
       dispatch(setModalIsOpen(true));
@@ -117,7 +144,7 @@ export default function MediaInfo(props: IProps) {
                 backgroundPosition: "50%",
                 backgroundSize: "cover",
                 backgroundImage: `url(${tmdbConfigs.backdropPath(
-                  backgroundPath
+                  mediaDetail.poster_path || mediaDetail.backdrop_path
                 )})`,
                 borderRadius: "30px",
               }}
@@ -135,7 +162,10 @@ export default function MediaInfo(props: IProps) {
                 variant="h3"
                 fontSize={{ xs: "2.2rem", sm: "2.5rem", md: "3rem" }}
               >
-                {title}
+                {mediaDetail.original_title ||
+                  mediaDetail.title ||
+                  mediaDetail.original_name ||
+                  mediaDetail.name}
               </Typography>
             </Box>
 
@@ -145,7 +175,9 @@ export default function MediaInfo(props: IProps) {
               justifyContent={{ xs: "center", md: "left" }}
               alignItems="center"
             >
-              {rate && <CircularRate value={rate} />}
+              {mediaDetail.vote_average && (
+                <CircularRate value={mediaDetail.vote_average} />
+              )}
 
               {genreList?.slice(0, 3).map((genre: IGenre) => (
                 <Chip
@@ -157,7 +189,7 @@ export default function MediaInfo(props: IProps) {
             </Stack>
 
             <Box>
-              <Typography fontWeight={700}>{overview}</Typography>
+              <Typography fontWeight={700}>{mediaDetail.overview}</Typography>
             </Box>
 
             <LoadingButton
@@ -178,7 +210,10 @@ export default function MediaInfo(props: IProps) {
               }}
               size="large"
               startIcon={isFavorite ? <Favorite /> : <FavoriteBorderOutlined />}
-              // onClick={handleFavorite}
+              loading={
+                isLoadingAddFavorite || isLoadingDeleteFavorite ? true : false
+              }
+              onClick={() => handleFavorite(favoriteId)}
             />
 
             <Container title="Cast">

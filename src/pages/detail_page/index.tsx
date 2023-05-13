@@ -8,7 +8,7 @@ import Container from "../../components/container";
 import MediaSection from "../../components/media_section";
 import TryAgainButton from "../../components/try_again_button";
 import uiConfigs from "../../configs/ui_configs";
-import { useGetStatus, useIsRequestPending } from "../../hooks/use_status";
+import { useGetStatus } from "../../hooks/use_status";
 import { useAppDispatch, useAppSelector } from "../../redux_store";
 import { checkFavorite } from "../../redux_store/favorite/favorite_actions";
 import { getMediaDetail } from "../../redux_store/media/media_actions";
@@ -17,21 +17,21 @@ import { toastMessage } from "../../utils/toast";
 import Wrapper from "../wrapper";
 import BackdropSlide from "./backdrop_slide";
 import BackgroundHeader from "./background_header";
-import MediaIframe from "./media_iframe";
 import MediaInfo from "./media_info";
 import Review from "./review";
+import MediaIframe from "./media_iframe";
 
 export default function DetailPage() {
   const { mediaType, mediaId } = useParams();
 
-  const { mediaDetail, genreList, castList, backdropList, numberOfSeason } =
-    useAppSelector((state) => state.mediaSlice);
+  const { userInfo } = useAppSelector((state) => state.authSlice);
+  const { mediaDetail } = useAppSelector((state) => state.mediaSlice);
   const dispatch = useAppDispatch();
 
-  const isLoadingCheckFavorite = useIsRequestPending(
-    "favorite",
-    "checkFavorite"
-  );
+  // const isLoadingCheckFavorite = useIsRequestPending(
+  //   "favorite",
+  //   "checkFavorite"
+  // );
   const [isLoading, isError] = useGetStatus("media", "getMediaDetail");
 
   useEffect(() => {
@@ -46,11 +46,11 @@ export default function DetailPage() {
 
   const handleTryAgain = async () => {
     dispatch(
-      getMediaDetail({ mediaType: String(mediaType), mediaId: String(mediaId) })
+      getMediaDetail({ mediaType: String(mediaType), mediaId: Number(mediaId) })
     )
       .unwrap()
       .then(() => {
-        if (localStorage.getItem("accessToken")) {
+        if (userInfo) {
           dispatch(checkFavorite(Number(mediaId)));
         }
       })
@@ -64,7 +64,7 @@ export default function DetailPage() {
   }, [mediaType, mediaId]);
 
   const handleRenderMediaDetail = () => {
-    if (isLoadingCheckFavorite || isLoading) {
+    if (isLoading) {
       return (
         <Box
           display="flex"
@@ -105,9 +105,7 @@ export default function DetailPage() {
 
     return (
       <Box>
-        <BackgroundHeader
-          backgroundPath={mediaDetail.backdrop_path || mediaDetail.poster_path}
-        />
+        <BackgroundHeader />
 
         <Stack
           sx={{
@@ -122,37 +120,22 @@ export default function DetailPage() {
           }}
         >
           {/* Media Detail Info */}
-          <MediaInfo
-            backgroundPath={
-              mediaDetail.poster_path || mediaDetail.backdrop_path
-            }
-            title={
-              mediaDetail.original_title ||
-              mediaDetail.title ||
-              mediaDetail.original_name ||
-              mediaDetail.name
-            }
-            rate={mediaDetail.vote_average}
-            genreList={genreList}
-            overview={mediaDetail.overview}
-            castList={castList}
-          />
+          <MediaInfo mediaType={String(mediaType)} mediaId={Number(mediaId)} />
 
           {/* Media Detail Videos */}
           <MediaIframe
             mediaType={String(mediaType)}
             mediaId={Number(mediaId)}
-            numberOfSeason={numberOfSeason}
           />
 
           {/* Backdrops */}
           <Box sx={{ ...uiConfigs.style.mainContent, margin: "0 !important" }}>
             <Container title="backdrops">
-              <BackdropSlide backdrops={backdropList} />
+              <BackdropSlide />
             </Container>
           </Box>
 
-          <Review mediaType={String(mediaType)} mediaId={String(mediaId)} />
+          <Review mediaType={String(mediaType)} mediaId={Number(mediaId)} />
 
           {/* Recommend */}
           <Box sx={{ ...uiConfigs.style.mainContent, margin: "0 !important" }}>

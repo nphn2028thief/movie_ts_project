@@ -21,7 +21,7 @@ import dayjs from "dayjs";
 
 interface IProps {
   mediaType: string;
-  mediaId: string;
+  mediaId: number;
 }
 
 export default function Review(props: IProps) {
@@ -156,10 +156,14 @@ export default function Review(props: IProps) {
       )}
 
       {reviewList.map((item) => (
-        <Stack direction="row" gap={3} padding={2} borderRadius="4px">
-          <Avatar>
-            <Image />
-          </Avatar>
+        <Stack
+          key={item._id}
+          direction="row"
+          gap={3}
+          padding={2}
+          borderRadius="4px"
+        >
+          <Avatar src={item.account.image} alt="avatar" />
 
           <Stack flex={1} gap={2}>
             <Stack direction="row" alignItems="center" gap={1}>

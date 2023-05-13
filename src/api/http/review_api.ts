@@ -4,7 +4,7 @@ import publicClient from "../client/public_client";
 
 const reviewEndpoints = {
   list: "/reviews",
-  listByMedia: (mediaType: string, mediaId: string) =>
+  listByMedia: (mediaType: string, mediaId: number) =>
     `/reviews/${mediaType}/${mediaId}`,
   add: "/reviews",
   delete: (reviewId: string) => `/reviews/${reviewId}`,
@@ -15,7 +15,7 @@ const reviewApi = {
     return privateClient.get<IReview[]>(reviewEndpoints.list);
   },
 
-  getReviewsByMedia: (mediaType: string, mediaId: string) => {
+  getReviewsByMedia: (mediaType: string, mediaId: number) => {
     return publicClient.get<IReview[]>(
       reviewEndpoints.listByMedia(mediaType, mediaId)
     );

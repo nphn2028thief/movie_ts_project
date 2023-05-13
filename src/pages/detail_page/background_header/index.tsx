@@ -1,15 +1,12 @@
 import { Box, useTheme } from "@mui/material";
 import tmdbConfigs from "../../../api/configs/tmdb_configs";
 import uiConfigs from "../../../configs/ui_configs";
+import { useAppSelector } from "../../../redux_store";
 
-interface IProps {
-  backgroundPath: string;
-}
-
-export default function BackgroundHeader(props: IProps) {
-  const { backgroundPath } = props;
-
+export default function BackgroundHeader() {
   const theme = useTheme();
+
+  const { mediaDetail } = useAppSelector((state) => state.mediaSlice);
 
   return (
     <Box
@@ -23,7 +20,9 @@ export default function BackgroundHeader(props: IProps) {
         },
         backgroundPosition: "top",
         backgroundSize: "cover",
-        backgroundImage: `url(${tmdbConfigs.backdropPath(backgroundPath)})`,
+        backgroundImage: `url(${tmdbConfigs.backdropPath(
+          mediaDetail.backdrop_path || mediaDetail.poster_path
+        )})`,
         // backgroundAttachment: "fixed",
         "&:before": {
           content: '""',

@@ -10,11 +10,13 @@ import {
 interface IState {
   favoriteList: IFavorite[];
   isFavorite: boolean;
+  favoriteId?: string;
 }
 
 const initialState: IState = {
   favoriteList: [],
   isFavorite: false,
+  favoriteId: undefined,
 };
 
 const favoriteSlice = createSlice({
@@ -29,7 +31,11 @@ const favoriteSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(checkFavorite.fulfilled, (state, action) => {
-        state.isFavorite = action.payload;
+        const { message, favoriteId } = action.payload;
+        state.isFavorite = message;
+        favoriteId
+          ? (state.favoriteId = favoriteId)
+          : (state.favoriteId = initialState.favoriteId);
       })
       .addCase(getMyFavorite.fulfilled, (state, action) => {
         state.favoriteList = action.payload;
@@ -37,6 +43,8 @@ const favoriteSlice = createSlice({
       .addCase(addFavorite.fulfilled, (state, action) => {
         const { message, data } = action.payload;
         state.favoriteList = [data, ...state.favoriteList];
+        state.isFavorite = true;
+        state.favoriteId = data._id;
       })
       .addCase(deleteFavorite.fulfilled, (state, action) => {
         const { message, favoriteId } = action.payload;
@@ -44,6 +52,8 @@ const favoriteSlice = createSlice({
           (favorite) => favorite._id !== favoriteId
         );
         state.favoriteList = newFavoriteList;
+        state.isFavorite = false;
+        state.favoriteId = undefined;
       });
   },
 });

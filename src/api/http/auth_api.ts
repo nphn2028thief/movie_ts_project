@@ -3,6 +3,7 @@ import {
   IRegisterInfo,
   IUpdateAccountInfo,
   IUpdatePassword,
+  IUser,
 } from "../../types/auth";
 import privateClient from "../client/private_client";
 import publicClient from "../client/public_client";
@@ -44,13 +45,14 @@ const authApi = {
     );
   },
 
-  getMe: async () => {
-    try {
-      const response = await privateClient.get(authEndpoints.getMe);
-      return response;
-    } catch (error) {
-      return error;
-    }
+  getMe: () => {
+    return privateClient.get<IUser>(authEndpoints.getMe);
+    // try {
+    //   const response = await privateClient.get(authEndpoints.getMe);
+    //   return response;
+    // } catch (error) {
+    //   return error;
+    // }
   },
 
   updateMe: async (accountInfo: IUpdateAccountInfo) => {

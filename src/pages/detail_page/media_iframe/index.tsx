@@ -1,19 +1,20 @@
 import { Box, Button, Skeleton, Stack, Typography } from "@mui/material";
-import { LazyLoadComponent } from "react-lazy-load-image-component";
 import { useEffect, useRef, useState } from "react";
 import tmdbConfigs from "../../../api/configs/tmdb_configs";
+import mediaApi from "../../../api/http/media_api";
 import Container from "../../../components/container";
 import uiConfigs from "../../../configs/ui_configs";
-import mediaApi from "../../../api/http/media_api";
+import { useAppSelector } from "../../../redux_store";
 
 interface IProps {
   mediaType: string;
   mediaId: number;
-  numberOfSeason?: number;
 }
 
 export default function MediaIframe(props: IProps) {
-  const { mediaType, mediaId, numberOfSeason } = props;
+  const { mediaType, mediaId } = props;
+
+  const { numberOfSeason } = useAppSelector((state) => state.mediaSlice);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
