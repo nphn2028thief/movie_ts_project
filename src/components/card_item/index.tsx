@@ -52,7 +52,7 @@ export default function CardItem(props: IProps) {
           ...uiConfigs.style.backgroundImage(posterPath),
           paddingTop,
           "&:hover .media_info": {
-            // opacity: 1,
+            opacity: 1,
             bottom: 0,
           },
           "&:hover .media_backdrop, &:hover .media_play_btn": {
@@ -115,7 +115,11 @@ export default function CardItem(props: IProps) {
                 position: "absolute",
                 bottom: {
                   xs: 0,
-                  md: "-100%",
+                  md: "-20px",
+                },
+                opacity: {
+                  xs: 1,
+                  md: 0,
                 },
                 transition: "all 0.4s ease",
                 padding: {

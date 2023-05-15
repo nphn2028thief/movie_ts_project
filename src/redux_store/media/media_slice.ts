@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IBackdrop, ICast, IGenre } from "../../types/media";
-import { getMediaDetail } from "./media_actions";
+import { IBackdrop, ICast, IGenre, IMediaResult } from "../../types/media";
+import { getMediaDetail, getMediaList } from "./media_actions";
 
 interface IState {
   mediaDetail: any;

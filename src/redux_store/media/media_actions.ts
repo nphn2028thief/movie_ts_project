@@ -11,7 +11,7 @@ export const getMediaDetail = createAsyncThunk(
         payload.mediaId
       );
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       return rejectWithValue(error);
     }
   }
