@@ -7,8 +7,8 @@ import {
   SearchOutlined,
   SlideshowOutlined,
 } from "@mui/icons-material";
-import CPath from "../constants/path";
 import React from "react";
+import CPath from "../constants/path";
 import { IMenuConfig } from "../types/route_list";
 
 const HomePage = React.lazy(() => import("../pages/home_page"));
@@ -83,15 +83,16 @@ const menuConfigs: IMenuConfig = {
     },
     {
       id: 2,
-      name: "Media",
+      name: "Media List",
       path: CPath.mediaList,
       page: MediaPage,
+      // state: "movie",
     },
     // {
     //   id: 3,
     //   name: "Tv Series",
     //   path: CPath.tv,
-    //   page: MediaPage,
+    //   page: TvPage,
     //   state: "tv",
     // },
     {

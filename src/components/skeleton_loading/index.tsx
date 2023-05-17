@@ -17,8 +17,10 @@ export default function SkeletonLoading(props: IProps) {
           <Skeleton
             key={index}
             variant={variant}
-            width={width}
-            height={height}
+            sx={{
+              width,
+              height,
+            }}
           />
         );
       })}

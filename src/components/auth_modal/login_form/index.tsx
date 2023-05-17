@@ -1,21 +1,18 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Stack } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import * as yup from "yup";
 import { useIsRequestPending } from "../../../hooks/use_status";
 import { useAppDispatch } from "../../../redux_store";
 import { getMe, login } from "../../../redux_store/auth/auth_actions";
+import { checkFavorite } from "../../../redux_store/favorite/favorite_actions";
 import { setModalIsOpen } from "../../../redux_store/modal/modal_slice";
 import { ILoginInfo } from "../../../types/auth";
 import { toastMessage } from "../../../utils/toast";
 import FormInput from "../../hook_form/form_input";
-import {
-  checkFavorite,
-  getMyFavorite,
-} from "../../../redux_store/favorite/favorite_actions";
-import { useParams } from "react-router-dom";
 
 interface IProps {
   handleSwitchModalType: () => void;

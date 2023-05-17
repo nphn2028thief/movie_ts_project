@@ -2,10 +2,16 @@ import { LoadingButton } from "@mui/lab";
 import { Box, Button, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import mediaApi from "../../api/http/media_api";
 import CardItem from "../../components/card_item";
+import PageGrid from "../../components/page_grid";
+import PageHeaderGrid from "../../components/page_header_grid";
+import SkeletonLoading from "../../components/skeleton_loading";
+import TryAgainButton from "../../components/try_again_button";
 import usePrevious from "../../hooks/use_previous";
-import { IMediaResult } from "../../types/media";
+import { useGetStatus } from "../../hooks/use_status";
+import { useAppDispatch, useAppSelector } from "../../redux_store";
+import { getMediaList } from "../../redux_store/media/media_actions";
+import { resetMediaList, setPage } from "../../redux_store/media/media_slice";
 import {
   IMediaHeader,
   movieCategories,
@@ -13,78 +19,66 @@ import {
 } from "../../utils/media_header";
 import { toastMessage } from "../../utils/toast";
 import Wrapper from "../wrapper";
-import TryAgainButton from "../../components/try_again_button";
 
 export default function MediaPage() {
   const { mediaType } = useParams();
 
-  const [medias, setMedias] = useState<IMediaResult[]>([]);
-  const [currentCategory, setCurrentCategory] = useState<number>(1);
-  const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
+  const { media } = useAppSelector((state) => state.mediaSlice);
+  const dispatch = useAppDispatch();
+
+  const [isLoading, isError] = useGetStatus("media", "getMediaList");
+
+  const [category, setCategory] = useState<string>(
+    mediaType === "movie"
+      ? movieCategories[0].category
+      : tvCategories[0].category
+  );
 
   const prevMediaType = usePrevious(String(mediaType));
 
   useEffect(() => {
     return () => {
-      setMedias([]);
-      setCurrentCategory(1);
-      setPage(1);
-      setTotalPages(0);
-      setIsLoading(false);
-      setIsError(false);
+      setCategory(movieCategories[0].category);
+      dispatch(resetMediaList());
     };
   }, []);
 
-  const handleGetMedias = async () => {
-    setIsError(false);
-    setIsLoading(true);
-
-    const category =
-      mediaType === "movie"
-        ? movieCategories[currentCategory - 1].category
-        : tvCategories[currentCategory - 1].category;
-
-    try {
-      const response = await mediaApi.getMediaList({
-        mediaType: String(mediaType),
-        mediaCategory: category,
-        page,
-      });
-
-      setTotalPages(response.data.total_pages);
-
-      if (page !== 1) {
-        setMedias((prev) => [...prev, ...response.data.results]);
-      } else {
-        setMedias([...response.data.results]);
-      }
-
-      setIsLoading(false);
-    } catch (error: any) {
-      setIsLoading(false);
-      setIsError(true);
-      toastMessage.error(error.message || "System is error!");
-    }
-  };
-
   useEffect(() => {
     if (mediaType !== prevMediaType) {
-      setCurrentCategory(1);
-      setPage(1);
+      setCategory(
+        mediaType === "movie"
+          ? movieCategories[0].category
+          : tvCategories[0].category
+      );
+      dispatch(setPage(1));
     }
   }, [mediaType, prevMediaType]);
 
-  useEffect(() => {
-    handleGetMedias();
-  }, [mediaType, currentCategory, page, prevMediaType]);
+  const handleGetMediaList = () => {
+    dispatch(
+      getMediaList({
+        mediaType: String(mediaType),
+        mediaCategory: category,
+        page: media.page,
+      })
+    )
+      .unwrap()
+      .catch((error) =>
+        toastMessage.error(error.message || "System is error!")
+      );
+  };
 
-  const handleChangeCategory = (id: number) => {
-    if (currentCategory === id) return;
-    setCurrentCategory(id);
-    setPage(1);
+  useEffect(() => {
+    handleGetMediaList();
+  }, [category, media.page]);
+
+  const onChangeCategory = (category: string) => {
+    // if (category === category) {
+    //   return;
+    // }
+
+    dispatch(setPage(1));
+    setCategory(category);
   };
 
   const handleRenderHeader = () => {
@@ -99,16 +93,16 @@ export default function MediaPage() {
     return array.map((item) => (
       <Button
         key={item.id}
-        variant={currentCategory === item.id ? "contained" : "text"}
+        variant={category === item.category ? "contained" : "text"}
         sx={{
           color:
-            currentCategory === item.id
+            category === item.category
               ? "primary.contrastText"
               : "text.primary",
 
           padding: "6px 16px",
         }}
-        onClick={() => handleChangeCategory(item.id)}
+        onClick={() => onChangeCategory(item.category)}
       >
         {item.name}
       </Button>
@@ -116,64 +110,45 @@ export default function MediaPage() {
   };
 
   const handleRenderCardItem = () => {
-    if (isError) {
-      return <TryAgainButton onClick={handleGetMedias} />;
+    if (isLoading) {
+      if (media.page === 1) {
+        return (
+          <SkeletonLoading
+            length={10}
+            width={{
+              xs: "200px",
+              sm: "230px",
+              lg: "250px",
+            }}
+            height={{
+              xs: "300px",
+              sm: "360px",
+              lg: "400px",
+            }}
+          />
+        );
+      }
     }
 
-    return (
-      <Box
-        display="grid"
-        gridTemplateColumns={{
-          xs: "1fr 1fr",
-          sm: "repeat(3, 1fr)",
-          md: "repeat(4, 1fr)",
-          lg: "repeat(5, 1fr)",
-        }}
-        gap={2}
-        paddingX={{
-          xs: 2,
-          sm: 3,
-        }}
-      >
-        {medias.map((item, index) => (
-          <Box key={index}>
-            <CardItem
-              mediaType={String(mediaType)}
-              data={item}
-              paddingTop="160%"
-            />
-          </Box>
-        ))}
+    if (isError) {
+      return <TryAgainButton onClick={handleGetMediaList} />;
+    }
+
+    return media.data.map((item, index) => (
+      <Box key={index}>
+        <CardItem mediaType={String(mediaType)} data={item} paddingTop="160%" />
       </Box>
-    );
+    ));
   };
 
   return (
     <Wrapper>
       <Stack gap={4}>
-        {/* Header */}
-        <Box
-          display={{
-            xs: "grid",
-            sm: "flex",
-          }}
-          gridTemplateColumns="1fr 1fr"
-          justifyContent={{
-            xs: "center",
-            md: "flex-end",
-          }}
-          alignItems="center"
-          gap={2}
-          mt={4}
-          paddingX={3}
-        >
-          {handleRenderHeader()}
-        </Box>
+        <PageHeaderGrid>{handleRenderHeader()}</PageHeaderGrid>
 
-        {/* Card */}
-        {handleRenderCardItem()}
+        <PageGrid>{handleRenderCardItem()}</PageGrid>
 
-        {page < totalPages && (
+        {media.data && media.page < media.totalPages && (
           <LoadingButton
             variant="outlined"
             sx={{
@@ -182,7 +157,7 @@ export default function MediaPage() {
               textTransform: "capitalize",
               mt: 3,
             }}
-            onClick={() => setPage(page + 1)}
+            onClick={() => dispatch(setPage(media.page + 1))}
             loading={isLoading}
           >
             load more
