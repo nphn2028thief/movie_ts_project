@@ -116,13 +116,13 @@ const menuConfigs: IMenuConfig = {
     //   page: DetailPage,
     //   state: "tv",
     // },
-    {
-      id: 7,
-      name: "Person Detail",
-      path: CPath.personDetail,
-      page: DetailPage,
-      state: "person.detail",
-    },
+    // {
+    //   id: 7,
+    //   name: "Person Detail",
+    //   path: CPath.personDetail,
+    //   page: DetailPage,
+    //   state: "person.detail",
+    // },
     {
       id: 8,
       name: "My Profile",

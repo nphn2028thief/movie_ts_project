@@ -1,20 +1,20 @@
 interface ISearchHeader {
   id: number;
-  category: string;
+  type: string;
 }
 
 const searchCategories: ISearchHeader[] = [
   {
     id: 1,
-    category: "movie",
+    type: "movie",
   },
   {
     id: 2,
-    category: "tv",
+    type: "tv",
   },
   {
     id: 3,
-    category: "person",
+    type: "person",
   },
 ];
 

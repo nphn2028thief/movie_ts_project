@@ -6,6 +6,7 @@ import mediaSlice from "./media/media_slice";
 import mobileMenuSlice from "./mobile_menu/mobile_menu_slice";
 import modalSlice from "./modal/modal_slice";
 import modeSlice from "./mode/mode_slice";
+import personSlice from "./person/person_slice";
 import reviewSlice from "./review/review_slice";
 
 const reducer = {
@@ -17,6 +18,7 @@ const reducer = {
   mobileMenuSlice,
   modalSlice,
   modeSlice,
+  personSlice,
   reviewSlice,
 };
 

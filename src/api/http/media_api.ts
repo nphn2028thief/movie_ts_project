@@ -9,7 +9,7 @@ const mediaEndpoints = {
   episode: (tvId: number, seasonNumber: number) =>
     `/tv/${tvId}/season/${seasonNumber}`,
   search: (mediaType: string, q: string, page: number) =>
-    `/${mediaType}?query=${q}&page=${page}`,
+    `/search/${mediaType}?query=${q}&page=${page}`,
 };
 
 const mediaApi = {
@@ -32,14 +32,9 @@ const mediaApi = {
   },
 
   searchMedia: async (mediaType: string, keyword: string, page: number) => {
-    try {
-      const response = await publicClient.get(
-        mediaEndpoints.search(mediaType, keyword, page)
-      );
-      return response.data;
-    } catch (error) {
-      return error;
-    }
+    return publicClient.get<IMediaResponse>(
+      mediaEndpoints.search(mediaType, keyword, page)
+    );
   },
 };
 

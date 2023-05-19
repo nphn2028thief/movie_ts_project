@@ -1,3 +1,7 @@
+import {
+  IPersonDetailResponse,
+  IPersonMediaResponse,
+} from "../../types/person";
 import publicClient from "../client/public_client";
 
 const personEndpoints = {
@@ -6,26 +10,16 @@ const personEndpoints = {
 };
 
 const personApi = {
-  getPersonDetail: async (personId: string) => {
-    try {
-      const response = await publicClient.get(
-        personEndpoints.personDetail(personId)
-      );
-      return response;
-    } catch (error) {
-      return error;
-    }
+  getPersonDetail: (personId: string) => {
+    return publicClient.get<IPersonDetailResponse>(
+      personEndpoints.personDetail(personId)
+    );
   },
 
-  getPersonMedias: async (personId: string) => {
-    try {
-      const response = await publicClient.get(
-        personEndpoints.mediaDetail(personId)
-      );
-      return response;
-    } catch (error) {
-      return error;
-    }
+  getPersonMedias: (personId: string) => {
+    return publicClient.get<IPersonMediaResponse>(
+      personEndpoints.mediaDetail(personId)
+    );
   },
 };
 

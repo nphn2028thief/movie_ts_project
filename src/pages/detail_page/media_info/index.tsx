@@ -128,7 +128,7 @@ export default function MediaInfo(props: IProps) {
         zIndex: 2,
       }}
     >
-      <Stack direction={{ sm: "column", md: "row" }} gap={4}>
+      <Stack direction={{ xs: "column", md: "row" }} gap={4}>
         <Zoom in timeout={400}>
           <Box
             flex={{ md: "0 0 30%" }}

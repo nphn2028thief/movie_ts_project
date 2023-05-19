@@ -1,4 +1,11 @@
-import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Grow,
+  Stack,
+  Typography,
+  Zoom,
+} from "@mui/material";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "swiper/css";
@@ -8,7 +15,11 @@ import Container from "../../components/container";
 import MediaSection from "../../components/media_section";
 import TryAgainButton from "../../components/try_again_button";
 import uiConfigs from "../../configs/ui_configs";
-import { useGetStatus } from "../../hooks/use_status";
+import {
+  useGetStatus,
+  useIsRequestError,
+  useIsRequestPending,
+} from "../../hooks/use_status";
 import { useAppDispatch, useAppSelector } from "../../redux_store";
 import { checkFavorite } from "../../redux_store/favorite/favorite_actions";
 import { getMediaDetail } from "../../redux_store/media/media_actions";
@@ -20,12 +31,22 @@ import BackgroundHeader from "./background_header";
 import MediaInfo from "./media_info";
 import Review from "./review";
 import MediaIframe from "./media_iframe";
+import {
+  getPersonDetail,
+  getPersonMedia,
+} from "../../redux_store/person/person_actions";
+import dayjs from "dayjs";
+import PageGrid from "../../components/page_grid";
+import CardItem from "../../components/card_item";
 
 export default function DetailPage() {
   const { mediaType, mediaId } = useParams();
 
   const { userInfo } = useAppSelector((state) => state.authSlice);
   const { mediaDetail } = useAppSelector((state) => state.mediaSlice);
+  const { personDetail, personMedia } = useAppSelector(
+    (state) => state.personSlice
+  );
   const dispatch = useAppDispatch();
 
   // const isLoadingCheckFavorite = useIsRequestPending(
@@ -33,6 +54,8 @@ export default function DetailPage() {
   //   "checkFavorite"
   // );
   const [isLoading, isError] = useGetStatus("media", "getMediaDetail");
+  const isLoadingPerson = useIsRequestPending("person", "getPersonDetail");
+  const isErrorPerson = useIsRequestError("person", "getPersonDetail");
 
   useEffect(() => {
     if (!mediaType || !mediaId) return;
@@ -45,18 +68,32 @@ export default function DetailPage() {
   }, []);
 
   const handleTryAgain = async () => {
-    dispatch(
-      getMediaDetail({ mediaType: String(mediaType), mediaId: Number(mediaId) })
-    )
-      .unwrap()
-      .then(() => {
-        if (userInfo) {
-          dispatch(checkFavorite(Number(mediaId)));
-        }
-      })
-      .catch((error) => {
-        toastMessage.error(error.message || "System is error!");
-      });
+    if (mediaType === "person") {
+      dispatch(getPersonDetail(String(mediaId)))
+        .unwrap()
+        .then(() =>
+          dispatch(getPersonMedia(String(mediaId))).catch((error) =>
+            toastMessage.error(error.message || "System is error!")
+          )
+        );
+    } else {
+      dispatch(
+        getMediaDetail({
+          mediaType: String(mediaType),
+          mediaId: Number(mediaId),
+        })
+      )
+        .unwrap()
+        .then(() => {
+          if (userInfo) {
+            dispatch(checkFavorite(Number(mediaId)));
+          }
+        })
+        .catch((error) => {
+          toastMessage.error(error.message || "System is error!");
+        });
+    }
+    // console.log(mediaType);
   };
 
   useEffect(() => {
@@ -151,5 +188,122 @@ export default function DetailPage() {
     );
   };
 
-  return <Wrapper>{handleRenderMediaDetail()}</Wrapper>;
+  const handleRenderPersonDetail = () => {
+    if (isLoadingPerson) {
+      return (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100vh"
+        >
+          <CircularProgress size={28} thickness={6} color="error" />
+        </Box>
+      );
+    }
+
+    if (isErrorPerson) {
+      return (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100vh"
+        >
+          <TryAgainButton onClick={handleTryAgain} />
+        </Box>
+      );
+    }
+
+    if (!personDetail) {
+      return (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100vh"
+        >
+          <Typography>No data!</Typography>
+        </Box>
+      );
+    }
+
+    return (
+      <Stack gap="5rem" sx={{ ...uiConfigs.style.mainContent }}>
+        <Stack direction={{ xs: "column", md: "row" }} gap={3}>
+          <Zoom in timeout={400}>
+            <Box
+              flex={{ md: "0 0 30%", lg: "0 0 20%" }}
+              width={{ xs: "70%", sm: "50%", md: "auto" }}
+              alignSelf={{ xs: "center", md: "auto" }}
+            >
+              <Box
+                sx={{
+                  height: {
+                    md: "100%",
+                  },
+                  paddingTop: "160%",
+                  backgroundPosition: "50%",
+                  backgroundSize: "cover",
+                  backgroundImage: `url(${tmdbConfigs.backdropPath(
+                    personDetail.profile_path
+                  )})`,
+                  borderRadius: "30px",
+                }}
+              />
+            </Box>
+          </Zoom>
+
+          <Grow in style={{ transformOrigin: "0 0 0" }} timeout={800}>
+            <Stack
+              gap={{ xs: 2, lg: 2 }}
+              textAlign={{ xs: "center", md: "left" }}
+            >
+              <Box>
+                <Typography
+                  variant="h3"
+                  fontSize={{ xs: "2.2rem", sm: "2.5rem", md: "3rem" }}
+                >
+                  {personDetail.name}
+                </Typography>
+              </Box>
+
+              <Box>
+                <Typography>
+                  {dayjs(personDetail.birthday).format("DD / MM / YYYY")} -{" "}
+                  {personDetail.place_of_birth}
+                </Typography>
+              </Box>
+
+              <Box>
+                <Typography fontWeight={700}>
+                  {personDetail.biography}
+                </Typography>
+              </Box>
+            </Stack>
+          </Grow>
+        </Stack>
+        <Container title="Medias">
+          <PageGrid paddingX={0}>
+            {personMedia?.cast.map((item, index) => (
+              <CardItem
+                key={index}
+                data={item}
+                mediaType={item.media_type}
+                paddingTop="160%"
+              />
+            ))}
+          </PageGrid>
+        </Container>
+      </Stack>
+    );
+  };
+
+  return (
+    <Wrapper>
+      {mediaType === "person"
+        ? handleRenderPersonDetail()
+        : handleRenderMediaDetail()}
+    </Wrapper>
+  );
 }

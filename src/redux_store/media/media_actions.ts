@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import mediaApi from "../../api/http/media_api";
-import { IMedia, IMediaPayload } from "../../types/media";
+import { IMedia, IMediaPayload, IMediaPayloadSearch } from "../../types/media";
 
 export const getMediaList = createAsyncThunk(
   "media/getMediaList",
@@ -26,6 +26,22 @@ export const getMediaDetail = createAsyncThunk(
       const response = await mediaApi.getMediaDetail(
         payload.mediaType,
         payload.mediaId
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const searchMedia = createAsyncThunk(
+  "media/searchMedia",
+  async (payload: IMediaPayloadSearch, { rejectWithValue }) => {
+    try {
+      const response = await mediaApi.searchMedia(
+        payload.mediaType,
+        payload.keyword,
+        payload.page
       );
       return response.data;
     } catch (error: any) {

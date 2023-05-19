@@ -1,18 +1,17 @@
-import { Box, Button, Modal } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Modal } from "@mui/material";
+import { useIsRequestPending } from "../../hooks/use_status";
 import { useAppDispatch, useAppSelector } from "../../redux_store";
 import {
   resetType,
   setModalIsOpen,
   setType,
 } from "../../redux_store/modal/modal_slice";
+import { ETYPE } from "../../types/auth";
 import { ETHEME } from "../../types/theme_mode";
 import Logo from "../logo";
 import ModeWrapper from "../mode_wrapper";
 import LoginForm from "./login_form";
 import RegisterForm from "./register_form";
-import { ETYPE } from "../../types/auth";
-import { useIsRequestPending } from "../../hooks/use_status";
 
 export default function AuthModal() {
   const { isOpen, type } = useAppSelector((state) => state.modalSlice);

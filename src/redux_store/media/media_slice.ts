@@ -6,7 +6,7 @@ import {
   IMediaResponse,
   IMediaResult,
 } from "../../types/media";
-import { getMediaDetail, getMediaList } from "./media_actions";
+import { getMediaDetail, getMediaList, searchMedia } from "./media_actions";
 
 interface IState {
   media: {
@@ -75,6 +75,24 @@ const mediaSlice = createSlice({
 
         if (action.payload.number_of_seasons) {
           state.numberOfSeason = action.payload.number_of_seasons;
+        }
+      })
+      .addCase(searchMedia.fulfilled, (state, action) => {
+        const { results, page, total_pages } = action.payload;
+
+        state.media.page = page;
+
+        if (state.media.page !== 1) {
+          state.media.data = [...state.media.data, ...results];
+        } else {
+          state.media.data = results;
+        }
+
+        state.media.totalPages = total_pages;
+      })
+      .addCase(searchMedia.pending, (state, action) => {
+        if (action.meta.arg.page === 1) {
+          state.media = initialState.media;
         }
       });
   },

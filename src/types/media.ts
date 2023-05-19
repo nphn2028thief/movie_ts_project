@@ -129,3 +129,9 @@ export interface IMediaPayload {
   mediaType: string;
   mediaId: number;
 }
+
+export interface IMediaPayloadSearch {
+  mediaType: string;
+  keyword: string;
+  page: number;
+}
