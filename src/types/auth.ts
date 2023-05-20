@@ -40,7 +40,6 @@ export interface IUpdateAccountInfo
 }
 
 export interface IUpdatePassword {
-  accountId: string;
   password: string;
   newPassword: string;
   confirmNewPassword: string;

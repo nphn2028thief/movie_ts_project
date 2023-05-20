@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@mui/material";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import themeConfigs from "./configs/theme_configs";
 import CPath from "./constants/path";
 import { useAppDispatch, useAppSelector } from "./redux_store";
@@ -13,14 +13,14 @@ const App = () => {
   const { userInfo } = useAppSelector((state) => state.authSlice);
   const dispatch = useAppDispatch();
 
+  const navigate = useNavigate();
   const { pathname } = useLocation();
 
   useEffect(() => {
     dispatch(getMe());
   }, [dispatch]);
 
-  if (userInfo === null && pathname.startsWith("/me")) {
-    // navigate(CPath.home);
+  if (!localStorage.getItem("accessToken") && pathname.startsWith("/me")) {
     return <Navigate to={CPath.home} replace />;
   }
 

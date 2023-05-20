@@ -12,6 +12,7 @@ import Logo from "../logo";
 import ModeWrapper from "../mode_wrapper";
 import LoginForm from "./login_form";
 import RegisterForm from "./register_form";
+import ChangePasswordForm from "./change_password_form";
 
 export default function AuthModal() {
   const { isOpen, type } = useAppSelector((state) => state.modalSlice);
@@ -79,10 +80,12 @@ export default function AuthModal() {
                 handleSwitchModalType(ETYPE.register)
               }
             />
-          ) : (
+          ) : type === ETYPE.register ? (
             <RegisterForm
               handleSwitchModalType={() => handleSwitchModalType(ETYPE.login)}
             />
+          ) : (
+            <ChangePasswordForm />
           )}
         </Box>
       </Box>

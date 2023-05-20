@@ -17,66 +17,33 @@ const authEndpoints = {
 };
 
 const authApi = {
-  register: async (registerInfo: IRegisterInfo) => {
-    try {
-      const response = await publicClient.post(
-        authEndpoints.register,
-        registerInfo
-      );
-      return response;
-    } catch (error) {
-      return error;
-    }
+  register: (payload: IRegisterInfo) => {
+    return publicClient.post<{ message: string }>(
+      authEndpoints.register,
+      payload
+    );
   },
 
-  // login: async (loginInfo: ILoginInfo) => {
-  //   try {
-  //     const response = await publicClient.post(authEndpoints.login, loginInfo);
-  //     return response;
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // },
-
-  login: (loginInfo: ILoginInfo) => {
-    return publicClient.post<{ accessToken: string; refreshToken: string }>(
-      "/auth/login",
-      loginInfo
+  login: (payload: ILoginInfo) => {
+    return publicClient.post<{ accessToken: string }>(
+      authEndpoints.login,
+      payload
     );
   },
 
   getMe: () => {
     return privateClient.get<IUser>(authEndpoints.getMe);
-    // try {
-    //   const response = await privateClient.get(authEndpoints.getMe);
-    //   return response;
-    // } catch (error) {
-    //   return error;
-    // }
   },
 
-  updateMe: async (accountInfo: IUpdateAccountInfo) => {
-    try {
-      const response = await privateClient.patch(
-        authEndpoints.updateMe,
-        accountInfo
-      );
-      return response;
-    } catch (error) {
-      return error;
-    }
+  updateMe: async (payload: IUser) => {
+    return privateClient.patch<IUser>(authEndpoints.updateMe, payload);
   },
 
-  changePassword: async (passwordInfo: IUpdatePassword) => {
-    try {
-      const response = await privateClient.put(
-        authEndpoints.changePassword,
-        passwordInfo
-      );
-      return response;
-    } catch (error) {
-      return error;
-    }
+  changePassword: (passwordInfo: IUpdatePassword) => {
+    return privateClient.put<{ message: string; newPassword?: string }>(
+      authEndpoints.changePassword,
+      passwordInfo
+    );
   },
 };
 

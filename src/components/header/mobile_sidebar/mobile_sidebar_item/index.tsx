@@ -1,6 +1,5 @@
 import { DarkModeOutlined, LightModeOutlined } from "@mui/icons-material";
 import {
-  Avatar,
   Box,
   ListItemButton,
   ListItemIcon,
@@ -15,6 +14,7 @@ import { setIsOpen } from "../../../../redux_store/mobile_menu/mobile_menu_slice
 import { IMenu } from "../../../../types/route_list";
 import { ETHEME } from "../../../../types/theme_mode";
 import { handleSwitchTheme } from "../../../../utils/function";
+import UserAvatar from "../../../user_avatar";
 
 interface IProps {
   isMobile?: boolean;
@@ -54,11 +54,7 @@ export default function MobileSidebarItem(props: IProps) {
       <Box marginBottom="20px">
         {isMobile && userInfo && (
           <Stack spacing={1}>
-            <Avatar
-              src={userInfo.image || ""}
-              alt="user_avatar"
-              sx={{ width: 64, height: 64 }}
-            />
+            <UserAvatar width={64} height={64} />
 
             <Box>
               <Typography variant="h6">

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUser } from "../../types/auth";
-import { getMe, login } from "./auth_actions";
+import { changePassword, getMe, login, updateMe } from "./auth_actions";
 
 interface IState {
   userInfo: IUser | null;
@@ -28,6 +28,16 @@ const authSlice = createSlice({
       .addCase(getMe.fulfilled, (state, action) => {
         const userInfo = action.payload;
         state.userInfo = userInfo;
+      })
+      .addCase(updateMe.fulfilled, (state, action) => {
+        state.userInfo = action.payload;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        const { message, newPassword } = action.payload;
+
+        if (state.userInfo && newPassword) {
+          state.userInfo.password = newPassword;
+        }
       });
   },
 });

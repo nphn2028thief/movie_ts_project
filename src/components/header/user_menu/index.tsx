@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   ListItemButton,
   ListItemIcon,
@@ -13,6 +12,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import menuConfigs from "../../../configs/menu_configs";
 import { useAppDispatch, useAppSelector } from "../../../redux_store";
 import LogOutButton from "../../logout_button";
+import UserAvatar from "../../user_avatar";
 
 export default function UserMenu() {
   const { userInfo } = useAppSelector((state) => state.authSlice);
@@ -69,11 +69,7 @@ export default function UserMenu() {
           </Typography>
         </Box>
 
-        <Avatar
-          src={userInfo?.image || ""}
-          alt="user_avatar"
-          sx={{ width: 32, height: 32 }}
-        />
+        <UserAvatar width={32} height={32} />
       </Stack>
 
       <Menu
