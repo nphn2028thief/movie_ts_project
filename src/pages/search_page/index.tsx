@@ -122,28 +122,36 @@ export default function SearchPage() {
 
         <Box
           sx={{
-            position: "relative",
             ...uiConfigs.style.mainContent,
             margin: "0 !important",
           }}
         >
-          <TextField
-            inputRef={inputRef}
-            size="small"
-            fullWidth
-            value={searchValue}
-            placeholder="Search here..."
-            onChange={(e) => handleChangeValue(e)}
-          />
+          <Box position="relative">
+            <TextField
+              inputRef={inputRef}
+              size="small"
+              fullWidth
+              sx={{
+                "& input": {
+                  paddingRight: "46px",
+                },
+              }}
+              value={searchValue}
+              placeholder="Search here..."
+              onChange={(e) => handleChangeValue(e)}
+            />
 
-          <Box
-            display="flex"
-            position="absolute"
-            right={2}
-            top="50%"
-            sx={{ transform: "translateY(-50%)" }}
-          >
-            <CircularProgress size={20} color="error" />
+            {isLoading && (
+              <Box
+                display="flex"
+                position="absolute"
+                right={12}
+                top="50%"
+                sx={{ transform: "translateY(-50%)" }}
+              >
+                <CircularProgress size={20} color="error" />
+              </Box>
+            )}
           </Box>
         </Box>
 
