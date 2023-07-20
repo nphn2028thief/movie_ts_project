@@ -160,10 +160,10 @@ export default function DetailPage() {
           <MediaInfo mediaType={String(mediaType)} mediaId={Number(mediaId)} />
 
           {/* Media Detail Videos */}
-          <MediaIframe
+          {/* <MediaIframe
             mediaType={String(mediaType)}
             mediaId={Number(mediaId)}
-          />
+          /> */}
 
           {/* Backdrops */}
           <Box sx={{ ...uiConfigs.style.mainContent, margin: "0 !important" }}>
