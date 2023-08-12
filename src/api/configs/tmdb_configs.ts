@@ -26,11 +26,10 @@ const backdropPath = (imgEndpoint: string) =>
 const posterPath = (imgEndpoint: string) =>
   `https://image.tmdb.org/t/p/w500${imgEndpoint}`;
 
-const moviePath = (movieId: number) =>
-  `https://www.2embed.to/embed/tmdb/movie?id=${movieId}`;
+const moviePath = (movieId: number) => `https://www.2embed.cc/embed/${movieId}`;
 
 const tvPath = (tvId: number, season: number, episode: number) =>
-  `https://www.2embed.to/embed/tmdb/tv?id=${tvId}&s=${season}&e=${episode}`;
+  `https://www.2embed.cc/embedtv/${tvId}&s=${season}&e=${episode}`;
 
 const tmdbConfigs = {
   mediaType,

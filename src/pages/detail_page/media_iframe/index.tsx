@@ -85,7 +85,8 @@ export default function MediaIframe(props: IProps) {
           }
           title="Media Official Video"
           width="100%"
-          border="none"
+          frameBorder={0}
+          scrolling="no"
           allowFullScreen
         ></Box>
 
